@@ -1,0 +1,74 @@
+----------12:17 20/10/2022----------
+
+System.Net.Sockets.SocketException: An existing connection was forcibly closed by the remote host.
+
+  at System.Net.Sockets.Socket.Receive (System.Byte[] buffer) [0x00000] in <filename unknown>:0 
+  at Mod.ModHelper.SocketClient.initSender () [0x00000] in <filename unknown>:0 
+
+
+----------12:17 20/10/2022----------
+
+System.Net.Sockets.SocketException: An existing connection was forcibly closed by the remote host.
+
+  at System.Net.Sockets.Socket.Receive (System.Byte[] buffer) [0x00000] in <filename unknown>:0 
+  at Mod.ModHelper.SocketClient.initSender () [0x00000] in <filename unknown>:0 
+
+
+----------12:17 20/10/2022----------
+
+System.Net.Sockets.SocketException: An existing connection was forcibly closed by the remote host.
+
+  at System.Net.Sockets.Socket.Receive (System.Byte[] buffer) [0x00000] in <filename unknown>:0 
+  at Mod.ModHelper.SocketClient.initSender () [0x00000] in <filename unknown>:0 
+
+
+----------16:35 20/10/2022----------
+
+System.Net.Sockets.SocketException: An existing connection was forcibly closed by the remote host.
+
+  at System.Net.Sockets.Socket.Receive (System.Byte[] buffer) [0x00000] in <filename unknown>:0 
+  at Mod.ModHelper.SocketClient.initSender () [0x00000] in <filename unknown>:0 
+
+
+----------17:52 20/10/2022----------
+
+System.Net.Sockets.SocketException: An existing connection was forcibly closed by the remote host.
+
+  at System.Net.Sockets.Socket.Receive (System.Byte[] buffer) [0x00000] in <filename unknown>:0 
+  at Mod.ModHelper.SocketClient.initSender () [0x00000] in <filename unknown>:0 
+
+
+----------23:25 23/10/2022----------
+
+System.Net.Sockets.SocketException: An existing connection was forcibly closed by the remote host.
+
+  at System.Net.Sockets.Socket.Receive (System.Byte[] buffer) [0x00000] in <filename unknown>:0 
+  at Mod.ModHelper.SocketClient.initSender () [0x00000] in <filename unknown>:0 
+
+
+----------07:12 24/10/2022----------
+
+System.Net.Sockets.SocketException: An existing connection was forcibly closed by the remote host.
+
+  at System.Net.Sockets.Socket.Receive (System.Byte[] buffer) [0x00000] in <filename unknown>:0 
+  at Mod.ModHelper.SocketClient.initSender () [0x00000] in <filename unknown>:0 
+
+
+----------08:03 18/12/2022----------
+
+System.FormatException: Input string was not in the correct format
+  at System.Int32.Parse (System.String s) [0x00000] in <filename unknown>:0 
+  at Mod.ModHelper.SocketClient.initSender () [0x00000] in <filename unknown>:0 
+
+
+----------08:03 18/12/2022----------
+
+System.FormatException: Input string was not in the correct format
+  at System.Int32.Parse (System.String s) [0x00000] in <filename unknown>:0 
+  at Mod.ModHelper.SocketClient.initSender () [0x00000] in <filename unknown>:0 ----------19:03 04/01/2023----------
+
+System.FormatException: Input string was not in the correct format
+  at System.Int32.Parse (System.String s) [0x00000] in <filename unknown>:0 
+  at Mod.ModHelper.SocketClient.initSender () [0x00000] in <filename unknown>:0 
+
+

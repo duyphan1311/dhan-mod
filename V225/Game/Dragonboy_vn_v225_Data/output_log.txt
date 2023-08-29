@@ -1,0 +1,89 @@
+Initialize engine version: 5.6.7f1 (e80cc3114ac1)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: AMD Radeon(TM) Graphics (ID=0x15d8)
+    Vendor:   ATI
+    VRAM:     2033 MB
+    Driver:   31.0.12028.2
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\Mod_NRO\V225\Game\Dragonboy_vn_v225_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\Mod_NRO\V225\Game\Dragonboy_vn_v225_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\Mod_NRO\V225\Game\Dragonboy_vn_v225_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\Mod_NRO\V225\Game\Dragonboy_vn_v225_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\Mod_NRO\V225\Game\Dragonboy_vn_v225_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Mod_NRO\V225\Game\Dragonboy_vn_v225_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\Mod_NRO\V225\Game\Dragonboy_vn_v225_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Mod_NRO\V225\Game\Dragonboy_vn_v225_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.083 seconds
+Platform assembly: D:\Mod_NRO\V225\Game\Dragonboy_vn_v225_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\Mod_NRO\V225\Game\Dragonboy_vn_v225_Data\Managed\System.dll (this message is harmless)
+<RI> Initializing input.
+XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
+<RI> Input initialized.
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initialized touch support.
+UnloadTime: 9.075900 ms
+Setting up 4 worker threads for Enlighten.
+  Thread -> id: 37c8 -> priority: 1 
+  Thread -> id: 2d10 -> priority: 1 
+  Thread -> id: 23a4 -> priority: 1 
+  Thread -> id: 3248 -> priority: 1 
+init Session_ME
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+init Session_ME
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Trying to create a material from string - this is no longer supported.
+ 
+(Filename:  Line: 1086)
+
+connecting...!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+host: dragon7.teamobi.com
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+port: 14445
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+  at System.IO.BinaryReader.ReadByte () [0x00000] in <filename unknown>:0 
+  at System.IO.BinaryReader.ReadSByte () [0x00000] in <filename unknown>:0 
+  at Session_ME+MessageCollector.readMessage () [0x00000] in <filename unknown>:0 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+disconnect
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+connecting...!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+host: dragon7.teamobi.com
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+port: 14445
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+APP QUIT
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+  at System.Net.Sockets.NetworkStream.Read (System.Byte[] buffer, Int32 offset, Int32 size) [0x00000] in <filename unknown>:0 
+  at System.IO.Stream.ReadByte () [0x00000] in <filename unknown>:0 
+  at System.IO.BinaryReader.ReadByte () [0x00000] in <filename unknown>:0 
+  at System.IO.BinaryReader.ReadSByte () [0x00000] in <filename unknown>:0 
+  at Session_ME+MessageCollector.readMessage () [0x00000] in <filename unknown>:0 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+

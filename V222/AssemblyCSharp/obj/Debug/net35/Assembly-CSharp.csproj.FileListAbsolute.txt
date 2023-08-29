@@ -1,0 +1,8 @@
+D:\Mod_NRO\V222\AssemblyCSharp\bin\Debug\net35\Assembly-CSharp.dll
+D:\Mod_NRO\V222\AssemblyCSharp\bin\Debug\net35\UnityEngine.dll
+D:\Mod_NRO\V222\AssemblyCSharp\obj\Debug\net35\Assembly-CSharp.csproj.AssemblyReference.cache
+D:\Mod_NRO\V222\AssemblyCSharp\obj\Debug\net35\Assembly-CSharp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Mod_NRO\V222\AssemblyCSharp\obj\Debug\net35\Assembly-CSharp.csproj.CoreCompileInputs.cache
+D:\Mod_NRO\V222\AssemblyCSharp\obj\Debug\net35\Assembly-CSharp.csproj.CopyComplete
+D:\Mod_NRO\V222\AssemblyCSharp\obj\Debug\net35\Assembly-CSharp.dll
+D:\Mod_NRO\V222\AssemblyCSharp\bin\Debug\net35\LitJson.dll
