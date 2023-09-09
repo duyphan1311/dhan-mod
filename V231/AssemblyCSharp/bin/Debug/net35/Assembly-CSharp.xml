@@ -559,6 +559,13 @@
             <param name="templatesId">Mảng chứa các id của các item muốn sử dụng.</param>
             <returns>true nếu có vật phẩm được sử dụng.</returns>
         </member>
+        <member name="M:Mod.Utilities.getIndexItemBagByName(System.String[])">
+            <summary>
+            Sử dụng một item có tên chứa một trong số các chuỗi được truyền vào.
+            </summary>
+            <param name="strName">Mảng chứa các chuỗi nằm trong tên của các item muốn sử dụng.</param>
+            <returns>true nếu có vật phẩm được sử dụng.</returns>
+        </member>
         <member name="M:Mod.Utilities.teleToNpc(Npc)">
             <summary>
             Dịch chuyển tới npc trong map.

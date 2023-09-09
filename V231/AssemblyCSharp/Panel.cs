@@ -7496,7 +7496,7 @@ public class Panel : IActionListener, IChatable
 						}
 						#region mod
 						if (item.template.type == 32 || item.template.type == 11 ||
-							item.template.type == 72 || item.template.type == 23 || item.template.type == 27 ||
+                            item.template.type == 72 || item.template.type == 23 || item.template.type == 27 ||
 							(item.template.type >= 0 && item.template.type <= 5))
 						{
 							bool HasItemInList = listUpgrade.Any(x => ((selected - Char.myCharz().arrItemBody.Length) == x.id && currItem.template.type == x.type && currItem.template.name == x.name));
@@ -7510,8 +7510,18 @@ public class Panel : IActionListener, IChatable
 					else
 					{
 						myVector.addElement(new Command(mResources.USE, this, 2001, currItem));
-						#region mod
-						if (AutoUseItem.listItemUse.Count <= 0)
+						if (item.template.type == 32 || item.template.type == 11 || item.template.id == 1200 ||
+                            item.template.type == 72 || item.template.type == 23 || item.template.type == 27 ||
+							(item.template.type >= 0 && item.template.type <= 5))
+						{
+
+                            if (Char.myCharz().havePet)
+                            {
+                                myVector.addElement(new Command(mResources.MOVEFORPET, this, 2005, currItem));
+                            }
+                        }
+                        #region mod
+                        if (AutoUseItem.listItemUse.Count <= 0)
 						{
 							myVector.addElement(new Command("Dùng liên tục", AutoUseItem.gI, 1, currItem));
 						}

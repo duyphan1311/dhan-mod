@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Mod_NRO\\code\\V231\\AssemblyCSharp\\Assembly-CSharp.csproj": {}
+    "D:\\Mod_NRO\\code\\Version\\V231\\AssemblyCSharp\\Assembly-CSharp.csproj": {}
   },
   "projects": {
-    "D:\\Mod_NRO\\code\\V231\\AssemblyCSharp\\Assembly-CSharp.csproj": {
+    "D:\\Mod_NRO\\code\\Version\\V231\\AssemblyCSharp\\Assembly-CSharp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Mod_NRO\\code\\V231\\AssemblyCSharp\\Assembly-CSharp.csproj",
+        "projectUniqueName": "D:\\Mod_NRO\\code\\Version\\V231\\AssemblyCSharp\\Assembly-CSharp.csproj",
         "projectName": "Assembly-CSharp",
-        "projectPath": "D:\\Mod_NRO\\code\\V231\\AssemblyCSharp\\Assembly-CSharp.csproj",
+        "projectPath": "D:\\Mod_NRO\\code\\Version\\V231\\AssemblyCSharp\\Assembly-CSharp.csproj",
         "packagesPath": "C:\\Users\\duyphan\\.nuget\\packages\\",
-        "outputPath": "D:\\Mod_NRO\\code\\V231\\AssemblyCSharp\\obj\\",
+        "outputPath": "D:\\Mod_NRO\\code\\Version\\V231\\AssemblyCSharp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -43,7 +43,7 @@
       "frameworks": {
         "net35": {
           "targetAlias": "net35",
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

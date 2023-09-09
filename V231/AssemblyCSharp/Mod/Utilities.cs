@@ -152,6 +152,27 @@ namespace Mod
 
             return -1;
         }
+
+        /// <summary>
+        /// Sử dụng một item có tên chứa một trong số các chuỗi được truyền vào.
+        /// </summary>
+        /// <param name="strName">Mảng chứa các chuỗi nằm trong tên của các item muốn sử dụng.</param>
+        /// <returns>true nếu có vật phẩm được sử dụng.</returns>
+        public static sbyte getIndexItemBagByName(params string[] strName)
+        {
+            var myChar = Char.myCharz();
+            int length = myChar.arrItemBag.Length;
+            for (sbyte i = 0; i < length; i++)
+            {
+                var item = myChar.arrItemBag[i];
+                if (item != null && Array.ConvertAll(strName, str => str.Trim().ToLower()).Any(item.template.name.ToLower().Contains))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
         #endregion
 
         /// <summary>
@@ -374,7 +395,8 @@ namespace Mod
         [ChatCommand("bt"), HotkeyCommand('f')]
         public static void usePorata()
         {
-            var index = getIndexItemBag(921, 454, 1156, 1153, 2074, 2064, 2075, 2095, 2105);
+
+            var index = getIndexItemBagByName("porata");
             if (index == -1)
             {
                 GameScr.info1.addInfo("Không tìm thấy bông tai", 0);

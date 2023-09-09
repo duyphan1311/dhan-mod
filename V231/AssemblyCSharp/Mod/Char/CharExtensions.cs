@@ -292,23 +292,23 @@ namespace Mod
 
         public static Color getFlagColor(this Char @char)
         {
-            switch (@char.cFlag)
+            return @char.cFlag switch
             {
-                case 1: return Color.cyan;
-                case 2: return Color.red;
-                case 3: return new Color(0.56f, 0.19f, 0.77f);
-                case 4: return Color.yellow;
-                case 5: return Color.green;
-                case 6: return Color.magenta;
-                case 7: return new Color(1f, 0.5f, 0f);
-                case 8: return new Color(0.18f, 0.18f, 0.18f);
-                case 9: return Color.blue;
-                case 10: return Color.red;
-                case 11: return Color.blue;
-                case 12: return Color.white;
-                case 13: return Color.black;
-                default: return Color.clear;
-            }
+                1 => Color.cyan,
+                2 => Color.red,
+                3 => new Color(0.56f, 0.19f, 0.77f),
+                4 => Color.yellow,
+                5 => Color.green,
+                6 => Color.magenta,
+                7 => new Color(1f, 0.5f, 0f),
+                8 => new Color(0.18f, 0.18f, 0.18f),
+                9 => Color.blue,
+                10 => Color.red,
+                11 => Color.blue,
+                12 => Color.white,
+                13 => Color.black,
+                _ => Color.clear,
+            };
         }
 
         public static int getSuicideRange(this Char @char)
