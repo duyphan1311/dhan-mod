@@ -59,6 +59,7 @@ namespace Mod
         public static string host = "";
         public static int server = -1;
         public static int port = 14445;
+        public static string key = "";
         public static int language = 0;
         public static string status = "Đã kết nối";
         public static JsonData sizeData = null;
@@ -541,7 +542,7 @@ namespace Mod
         [ChatCommand("out")]
         public static void Out()
         {
-            Controller.isDisconnected = true;
+            GameCanvas.gI().onDisconnected();
         }
 
         [HotkeyCommand('u')]
@@ -1196,6 +1197,23 @@ namespace Mod
             return false;
         }
 
+        public static bool HasOptions(Item item, out List<int> listOpt, out List<int> listIndex, params int[] option)
+        {
+            listOpt = new List<int>();
+            listIndex = new List<int>();
+            for (int i = 0; i < item.itemOption.Length; i++)
+            {
+                int optionId = item.itemOption[i].optionTemplate.id;
+                if (option.Contains(optionId) && !listOpt.Contains(optionId))
+                {
+                    listOpt.Add(optionId);
+                    listIndex.Add(i);
+                }
+            }
+            if (listOpt.Count > 0) return true;
+            return false;
+        }
+
         public static long GetLastTimePress()
         {
             return (long)typeof(GameCanvas).GetField("lastTimePress", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
@@ -1355,5 +1373,49 @@ namespace Mod
             }
             return false;
         }
+
+        public static bool isCheckLag;
+
+        public static int requests = 30;
+
+        private static long lastTimeCheck = 0;
+
+        private static readonly int timeCheck = 1000;
+
+        public static void checkLag()
+        {
+            if (GameCanvas.currentScreen == GameScr.instance && mSystem.currentTimeMillis() - lastTimeCheck > timeCheck)
+            {
+                requests--;
+                if (requests <= 0)
+                {
+                    requests = 30;
+                    GameCanvas.gI().onDisconnected();
+                }
+                lastTimeCheck = mSystem.currentTimeMillis();
+            }
+        }
+
+        public static void setCheckLag(bool value) => isCheckLag = value;
+
+        public static bool isBackToOldZone;
+
+        public static bool isLogin;
+
+        public static int oldMap;
+
+        public static int oldZone;
+
+        public static void BackToOldZone()
+        {
+            if (isLogin)
+            {
+                Thread.Sleep(5000);
+                if (TileMap.zoneID != oldZone && TileMap.mapID == oldMap)
+                    Service.gI().requestChangeZone(oldZone, 0);
+                isLogin = false;
+            }
+        }
+        public static void setStateBackToOldZone(bool value) => isBackToOldZone = value;
     }
 }

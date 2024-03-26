@@ -1,4 +1,5 @@
 ﻿using Mod.Auto;
+using Mod.MenuOnscreen;
 using Mod.ModHelper.CommandMod.Chat;
 using Mod.ModHelper.CommandMod.Hotkey;
 using Mod.ModHelper.Menu;
@@ -399,9 +400,10 @@ namespace Mod.PickMob
                 GameScr.info1.addInfo("Bạn đang bật auto T77 hoặc auto up SS!", 0);
                 return;
             }
-            IsTanSat = !IsTanSat;
-            if (TypeMobsTanSat.Count > 0 && !IsTanSat) TypeMobsTanSat.Clear();
-            GameScr.info1.addInfo("Tự động đánh quái: " + (IsTanSat ? "Bật" : "Tắt"), 0);
+            MenuMain.showMenuTanSat();
+            //IsTanSat = !IsTanSat;
+            //if (TypeMobsTanSat.Count > 0 && !IsTanSat) TypeMobsTanSat.Clear();
+            //GameScr.info1.addInfo("Tự động đánh quái: " + (IsTanSat ? "Bật" : "Tắt"), 0);
         }
 
         [ChatCommand("ask")]

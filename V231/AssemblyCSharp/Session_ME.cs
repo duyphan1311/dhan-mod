@@ -23,7 +23,11 @@ public class Session_ME : ISession
 			sendingMessage.Add(message);
 		}
 
-		public void run()
+		#region mod
+		private long lastTimeCheck = 0;
+        #endregion
+
+        public void run()
 		{
 			while (connected)
 			{
@@ -46,12 +50,21 @@ public class Session_ME : ISession
 					{
 						Cout.LogError(ex.ToString());
 					}
-				}
-				catch (Exception)
+					#region mod
+					if (Utilities.isCheckLag && mSystem.currentTimeMillis() - lastTimeCheck < 100L)
+                        Utilities.requests = 30;
+                    lastTimeCheck = mSystem.currentTimeMillis();
+                    #endregion
+                }
+                catch (Exception)
 				{
 					Res.outz("error send message! ");
-				}
-			}
+                    #region mod
+					if(Utilities.isCheckLag)
+						Utilities.checkLag();
+                    #endregion
+                }
+            }
 		}
 	}
 
@@ -138,7 +151,7 @@ public class Session_ME : ISession
 				GameMidlet.IP2 = message.reader().readUTF();
 				GameMidlet.PORT2 = message.reader().readInt();
 				GameMidlet.isConnect2 = ((message.reader().readByte() != 0) ? true : false);
-				if (isMainSession && GameMidlet.isConnect2)
+                if (isMainSession && GameMidlet.isConnect2)
 				{
 					GameCanvas.connect2();
 				}
@@ -211,8 +224,8 @@ public class Session_ME : ISession
 					{
 						array[i] = readKey(array[i]);
 					}
-				}
-				return new Message(b, array);
+                }
+                return new Message(b, array);
 			}
 			catch (Exception ex)
 			{
@@ -466,7 +479,7 @@ public class Session_ME : ISession
 		if (Thread.CurrentThread.Name == Main.mainThreadName)
 		{
 			messageHandler.onMessage(msg);
-		}
+        }
 		else
 		{
 			recieveMsg.addElement(msg);

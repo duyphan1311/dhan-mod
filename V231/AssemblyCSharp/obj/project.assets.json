@@ -8,8 +8,7 @@
     ".NETFramework,Version=v3.5": []
   },
   "packageFolders": {
-    "C:\\Users\\duyphan\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\duyphan\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -20,12 +19,8 @@
       "packagesPath": "C:\\Users\\duyphan\\.nuget\\packages\\",
       "outputPath": "D:\\Mod_NRO\\code\\Version\\V231\\AssemblyCSharp\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
         "C:\\Users\\duyphan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -50,7 +45,7 @@
     "frameworks": {
       "net35": {
         "targetAlias": "net35",
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

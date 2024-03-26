@@ -83,6 +83,7 @@ namespace Mod
 
         static readonly List<string> strBossAppeared = new List<string>()
         {
+            "Boss ",
             "BOSS ",
             " vừa xuất hiện tại ",
             " appear at ",
@@ -154,7 +155,7 @@ namespace Mod
                 boss.isDied = true;
                 boss.killer = array[0];
             }
-            else if (chatVip.StartsWith(strBossAppeared[0]))
+            else if (chatVip.StartsWith(strBossAppeared[0]) || chatVip.StartsWith(strBossAppeared[1]))
             {
                 strBossAppeared.ForEach(s => chatVip = chatVip.Replace(s, "|"));
                 string[] array = chatVip.Split('|');

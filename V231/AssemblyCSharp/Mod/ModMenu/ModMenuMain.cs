@@ -44,10 +44,12 @@ namespace Mod.ModMenu
             new ModMenuItemBoolean("Hiện thông tin sư phụ", "Bật/tắt hiển thị thông tin sư phụ lên màn hình", CharInfo.setState, true, "infochar"),
             new ModMenuItemBoolean("Hiện thông tin đệ tử", "Bật/tắt hiển thị thông tin đệ tử lên màn hình", PetInfo.setState, true, "infopet"),
             new ModMenuItemBoolean("Hiện danh sách boss", "Bật/tắt hiển thị danh sách boss trong khu lên màn hình", ListBossInMap.setState, true, "isshowlistboss"),
-            //new ModMenuItemBoolean("Hiện danh sách tiêu diệt boss", "Bật/tắt hiển thị danh sách tiêu diệt boss lên màn hình", LogKillBoss.setState, true, "isshowlistlogkillboss"),
+            new ModMenuItemBoolean("Hiện danh sách tiêu diệt boss", "Bật/tắt hiển thị danh sách tiêu diệt boss lên màn hình", LogKillBoss.setState, true, "isshowlistlogkillboss", true, "Tính năng đang phát triển!"),
             new ModMenuItemBoolean("Hiện danh sách vật phẩm tự động", "Bật/tắt hiển thị danh sách các vật phẩm đang tự động sử dụng (tên vật phẩm, số lượng dùng, thời gian mỗi lần sử dụng và thời gian lần sử dụng tiếp theo)", AutoUseItem.setState, true, "isShowListItemAutoUse"),
             new ModMenuItemBoolean("Chia sẻ thông tin nhân vật đến QLTK", "Bật/tắt chia sẻ thông tin nhân vật đến QLTK", ShareInfo.setState, false, "isShareInfo", true, "Đang gặp lỗi khiến QLTK crash!"),
             new ModMenuItemBoolean("Tự động đến map boss khi săn boss", "Bật/tắt Tự động đến map boss", AutoFindBoss.setState, false, "isGotoMapBoss"),
+            new ModMenuItemBoolean("Check lag", "Bật/tắt Tự động đăng nhập lại khi lag", Utilities.setCheckLag, false),
+            new ModMenuItemBoolean("Back to old zone", "Bật/tắt Tự động chuyển về khu vực cũ khi mất kết nối", Utilities.setStateBackToOldZone, false),
         };
 
         /// <summary>

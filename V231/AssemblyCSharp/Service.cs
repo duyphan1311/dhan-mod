@@ -827,7 +827,11 @@ public class Service
 			message.writer().writeBoolean(TField.isQwerty);
 			message.writer().writeBoolean(GameCanvas.isTouch);
 			message.writer().writeUTF(GameCanvas.getPlatformName() + "|" + GameMidlet.VERSION);
-			session.sendMessage(message);
+            #region mod
+            if (Utilities.key != string.Empty)
+                message.writer().writeUTF(Utilities.key);
+			#endregion
+            session.sendMessage(message);
 			message.cleanup();
 		}
 		catch (Exception ex)
@@ -856,7 +860,11 @@ public class Service
 			message.writer().writeBoolean(TField.isQwerty);
 			message.writer().writeBoolean(GameCanvas.isTouch);
 			message.writer().writeUTF(GameCanvas.getPlatformName() + "|" + GameMidlet.VERSION);
-			session = Session_ME2.gI();
+            #region mod
+            if (Utilities.key != string.Empty)
+                message.writer().writeUTF(Utilities.key);
+            #endregion
+            session = Session_ME2.gI();
 			session.sendMessage(message);
 			session = Session_ME.gI();
 			message.cleanup();
@@ -905,10 +913,10 @@ public class Service
 
 	public void login(string username, string pass, string version, sbyte type)
 	{
-        #region mod
-        GameEvents.onLogin(ref username, ref pass, ref type);
-        #endregion
-        try
+		#region mod
+		GameEvents.onLogin(ref username, ref pass, ref type);
+		#endregion
+		try
         {
 			Message message = messageNotLogin(0);
 			message.writer().writeUTF(username);

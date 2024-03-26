@@ -33,6 +33,7 @@ namespace Mod.Auto
         public static int solanSale;
         public static int soThoiVangBan = 10;
         public static int timeSaleGold = 500;
+        public static int menu2ID = 0;
         public static long lastTimeSaleGold;
         public static bool isBanVang;
 
@@ -63,6 +64,7 @@ namespace Mod.Auto
         public static bool isWait = false;
         public static bool isSaleGoldToUpgrade = false;
         public static bool isGoHomeGetGold = false;
+        public static bool isHaveMenu2 = false;
 
         public static List<Item> listKham = new();
         public static ItemUpgrade currItemUpgrade = new();
@@ -152,7 +154,7 @@ namespace Mod.Auto
                 GameCanvas.menu.doCloseMenu();
                 ChatPopup.currChatPopup = null;
                 isNCGTS = true;
-                AutoUpgrade.toggle(true);
+                toggle(true);
             })
             {
                 IsBackground = true,
@@ -187,7 +189,7 @@ namespace Mod.Auto
                 GameCanvas.menu.doCloseMenu();
                 ChatPopup.currChatPopup = null;
                 isHHTB = true;
-                AutoUpgrade.toggle(true);
+                toggle(true);
             })
             {
                 IsBackground = true,
@@ -213,7 +215,7 @@ namespace Mod.Auto
                 GameCanvas.menu.doCloseMenu();
                 ChatPopup.currChatPopup = null;
                 isTayHHTB = true;
-                AutoUpgrade.toggle(true);
+                toggle(true);
             })
             {
                 IsBackground = true,
@@ -285,7 +287,7 @@ namespace Mod.Auto
                             GameCanvas.menu.doCloseMenu();
                             ChatPopup.currChatPopup = null;
                             isNCSKH = true;
-                            AutoUpgrade.toggle(true);
+                            toggle(true);
                         })
                         {
                             IsBackground = true,
@@ -314,15 +316,15 @@ namespace Mod.Auto
                             Thread.Sleep(500);
                             Utilities.openMenu(21);
                             Service.gI().confirmMenu(21, 1);
-                            if (ServerListScreen.nameServer[Utilities.server].Contains("Otis") || ServerListScreen.nameServer[Utilities.server].Contains("Cumber"))
-                                Service.gI().confirmMenu(21, 0);
+                            if (isHaveMenu2)
+                                Service.gI().confirmMenu(idBaHatMit, (sbyte)menu2ID);
 
                             GameCanvas.menu.doCloseMenu();
                             ChatPopup.currChatPopup = null;
                             starUpgrade = index;
                             isPLH = true;
                             isShowListUpgrade = true;
-                            AutoUpgrade.toggle(true);
+                            toggle(true);
                         })
                         {
                             IsBackground = true,
@@ -347,9 +349,7 @@ namespace Mod.Auto
                 { "PST", 443 },
                 { "Vàng", 446 },
                 { "Hút HP", 441 },
-                { "Hút KI", 442 },
-                { "Sức đánh\nSpecial", 2015 },
-                { "HP Special", 965 }
+                { "Hút KI", 442 }
             };
 
             new MenuBuilder()
@@ -374,14 +374,21 @@ namespace Mod.Auto
                             GameCanvas.menu.doCloseMenu();
                             ChatPopup.currChatPopup = null;
                             isKham = true;
-                            AutoUpgrade.toggle(true);
+                            toggle(true);
                         })
                         {
                             IsBackground = true,
                             Name = "GotoDaoKame"
                         }.Start();
                     }));
-                }).start();
+                })
+                .addItem("Khác", new(() =>
+                {
+                    ChatTextField.gI().strChat = string.Empty;
+                    ChatTextField.gI().tfChat.name = string.Empty;
+                    ChatTextField.gI().startChat2(gI, "Nhập id vật phẩm dùng để khảm");
+                }))
+                .start();
         }
 
         private static void ShowMenuEpNR()
@@ -396,7 +403,7 @@ namespace Mod.Auto
                         epNRCaption = $"Nhập số lượng {index} sao bạn muốn ép";
                         ChatTextField.gI().strChat = string.Empty;
                         ChatTextField.gI().tfChat.name = string.Empty;
-                        ChatTextField.gI().startChat2(AutoUpgrade.gI, epNRCaption);
+                        ChatTextField.gI().startChat2(gI, epNRCaption);
                     }));
                 })
                 .start();
@@ -420,7 +427,7 @@ namespace Mod.Auto
                         csbtCaption = $"Nhập chỉ số phần trăm {key} bạn muốn mở";
                         ChatTextField.gI().strChat = string.Empty;
                         ChatTextField.gI().tfChat.name = string.Empty;
-                        ChatTextField.gI().startChat2(AutoUpgrade.gI, csbtCaption);
+                        ChatTextField.gI().startChat2(gI, csbtCaption);
                     }));
                 })
                 .start();
@@ -457,7 +464,7 @@ namespace Mod.Auto
                             Utilities.openMenu(21);
                             Service.gI().confirmMenu(21, 1);
                             isNCTB = true;
-                            AutoUpgrade.toggle(true);
+                            toggle(true);
                         })
                         {
                             IsBackground = true,
@@ -477,6 +484,7 @@ namespace Mod.Auto
             new ModMenuItemBoolean("Auto bán vàng", "Bật/tắt auto bán vàng khi nâng cấp", setStateSellGold, false, "isSaleGoldToUpgrade", true, "Bạn cần tắt chức năng \"Auto nhận vàng\"!"),
             new ModMenuItemBoolean("Auto ngọc", "Bật/tắt auto nhận ngọc khi nâng cấp", setStateGetDiamond, true, "isNhanNgoc"),
             new ModMenuItemBoolean("Sử dụng đá bảo vệ khi nâng cấp", "Bật/tắt Sử dụng đá bảo vệ khi nâng cấp", setStateUseDBV, false, "", false),
+            new ModMenuItemBoolean("Menu pha lê hoá cấp 2", "Có/Không menu pha lê hoá cấp 2", setStateMenuPLH2, false, "havemenu2"),
             
             new ModMenuItemInt("Số sao tối đa pha lê hoá", null, "Điều chỉnh số sao pha lê tối đa", 8, setMaxStarUpgrade, "maxStarUpgrade", false),
             new ModMenuItemInt("ID item bán vàng", null, "Điều chỉnh id item thỏi vàng", 457, setIDItemGold, "idThoiVang", false),
@@ -486,6 +494,7 @@ namespace Mod.Auto
             new ModMenuItemInt("Menu confirm nhận ngọc", null, "Điều chỉnh menu confirm của npc khi nhận ngọc", 1, setMenuConfirmGD, "npcNNCF", false),
             new ModMenuItemInt("Menu confirm mở chỉ số bông tai", null, "Điều chỉnh menu confirm của npc khi mở chỉ số bông tai", 5, setMenuConfirmCSBT, "npccsbtcf", false),
             new ModMenuItemInt("Số lượng thỏi vàng bán", null, "Điều chỉnh số lượng thỏi vàng sẽ bán khi thiếu vàng", 10, setSoLuongThoiVang, "soThoiVangBanPLH", false),
+            new ModMenuItemInt("Menu pha lê hoá câp 2", null, "Điều chỉnh menu pha lê hoá cấp 2", 0, setMenu2, "menuplh2", false),
         };
 
         public static void setStateGetGold(bool value) => isNhanVang = value;
@@ -493,6 +502,7 @@ namespace Mod.Auto
         public static void setStateGoHomeGetGold(bool value) => isGoHomeGetGold = value;
         public static void setStateSellGold(bool value) => isSaleGoldToUpgrade = value;
         public static void setStateUseDBV(bool value) => isUseDBV = value;
+        public static void setStateMenuPLH2(bool value) => isHaveMenu2 = value;
 
         public static void setMaxStarUpgrade(int value) => maxStarUpgrade = value;
         public static void setIDItemGold(int value) => idThoiVang = (short)value;
@@ -502,6 +512,7 @@ namespace Mod.Auto
         public static void setMenuConfirmGD(int value) => npcNNCF = (sbyte)value;
         public static void setMenuConfirmCSBT(int value) => npccsbt = (sbyte)value;
         public static void setSoLuongThoiVang(int value) => soThoiVangBan = value;
+        public static void setMenu2(int value) => menu2ID = value;
 
         private static void showTabMenuModPanel()
         {
@@ -529,7 +540,7 @@ namespace Mod.Auto
         {
             if (panel.selected < 0) return;
             int selected = panel.selected;
-            if (panel.selected < 5)
+            if (panel.selected < 6)
             {
                 if (!tabItem[selected].isDisabled)
                 {
@@ -557,14 +568,15 @@ namespace Mod.Auto
 
         public static Dictionary<int, string[]> inputModMenuItemInts = new Dictionary<int, string[]>()
         {
-            { 5, new string[]{ "Nhập số sao pha lê hoá tối đa", "Số sao" } },
-            { 6, new string[]{ "Nhập id thỏi vàng", "ID thỏi vàng" } },
-            { 7, new string[]{ "Nhập số vàng bắt đầu bán", "Số vàng" } },
-            { 8, new string[]{ "Nhập id npc nhận vàng tại đảo kame", "ID NPC" } },
-            { 9, new string[]{ "Nhập menu confirm nhận vàng", "Menu confirm" } },
-            { 10, new string[]{ "Nhập menu confirm nhận ngọc", "Menu confirm" } },
-            { 11, new string[]{ "Nhập menu confirm mở chỉ số bông tai", "Menu confirm" } },
-            { 12, new string[]{ "Nhập số lượng thỏi vàng", "Value" } },
+            { 6, new string[]{ "Nhập số sao pha lê hoá tối đa", "Số sao" } },
+            { 7, new string[]{ "Nhập id thỏi vàng", "ID thỏi vàng" } },
+            { 8, new string[]{ "Nhập số vàng bắt đầu bán", "Số vàng" } },
+            { 9, new string[]{ "Nhập id npc nhận vàng tại đảo kame", "ID NPC" } },
+            { 10, new string[]{ "Nhập menu confirm nhận vàng", "Menu confirm" } },
+            { 11, new string[]{ "Nhập menu confirm nhận ngọc", "Menu confirm" } },
+            { 12, new string[]{ "Nhập menu confirm mở chỉ số bông tai", "Menu confirm" } },
+            { 13, new string[]{ "Nhập số lượng thỏi vàng", "Value" } },
+            { 14, new string[]{ "Nhập menu pha lê hoá câp 2", "Menu confirm" } },
         };
 
         public static void paintTabMenuMod(Panel panel, mGraphics g)
@@ -577,7 +589,7 @@ namespace Mod.Auto
             string descriptionTextInfo = string.Empty;
             int x = 0, y = 0;
             string str = (mResources.status + ": ") == "Trạng thái: " ? "Đang " : (mResources.status + ": ");
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 int num = panel.xScroll;
                 int num2 = panel.yScroll + i * panel.ITEM_HEIGHT;
@@ -612,7 +624,7 @@ namespace Mod.Auto
                     mf.drawString(g, str + (modMenuItem.Value ? mResources.ON.ToLower() : mResources.OFF.ToLower()), num + num3 - 2, num2 + panel.ITEM_HEIGHT - 14, mFont.RIGHT);
                 }
             }
-            if(panel.selected < 5)
+            if(panel.selected < 6)
             {
                 if (isReset) TextInfo.reset();
                 else
@@ -623,7 +635,7 @@ namespace Mod.Auto
                 }
             }
             int currSelectedValue = 0;
-            for (int i = 5; i < panel.currentListLength; i++)
+            for (int i = 6; i < panel.currentListLength; i++)
             {
                 int num = panel.xScroll;
                 int num2 = panel.yScroll + i * panel.ITEM_HEIGHT;
@@ -673,7 +685,7 @@ namespace Mod.Auto
                     else mFont.tahoma_7_blue.drawString(g, description, num + 5, num2 + 11, 0);
                 }
             }
-            if(panel.selected >= 5)
+            if(panel.selected >= 6)
             {
                 if (isReset) TextInfo.reset();
                 else
@@ -699,13 +711,13 @@ namespace Mod.Auto
 
         public static void SaveData()
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 ModMenuItemBoolean modMenuItem = (ModMenuItemBoolean)tabItem[i];
                 if (!string.IsNullOrEmpty(modMenuItem.RMSName))
                     Utilities.saveRMSBool(modMenuItem.RMSName, modMenuItem.Value);
             }
-            for (int i = 5; i < tabItem.Length; i++)
+            for (int i = 6; i < tabItem.Length; i++)
             {
                 ModMenuItemInt modMenuItem = (ModMenuItemInt)tabItem[i];
                 if (!string.IsNullOrEmpty(modMenuItem.RMSName)) 
@@ -715,7 +727,7 @@ namespace Mod.Auto
 
         public static void LoadData()
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 ModMenuItemBoolean modMenuItem = (ModMenuItemBoolean)tabItem[i];
                 try
@@ -724,7 +736,7 @@ namespace Mod.Auto
                 }
                 catch { }
             }
-            for (int i = 5; i < tabItem.Length; i++)
+            for (int i = 6; i < tabItem.Length; i++)
             {
                 ModMenuItemInt modMenuItem = (ModMenuItemInt)tabItem[i];
                 try
@@ -773,7 +785,7 @@ namespace Mod.Auto
                 return;
             }
 
-            if ((Char.myCharz().luong <= 10000 || isWait) && !ServerListScreen.nameServer[Utilities.server].Contains("Cumber"))
+            if ((Char.myCharz().luong <= 10000 || isWait))
             {
                 isPLH = false;
                 isShowListUpgrade = false;
@@ -813,8 +825,8 @@ namespace Mod.Auto
 
                     Utilities.openMenu(idBaHatMit);
                     Service.gI().confirmMenu(idBaHatMit, 1);
-                    if (ServerListScreen.nameServer[Utilities.server].Contains("Otis") || ServerListScreen.nameServer[Utilities.server].Contains("Cumber"))
-                        Service.gI().confirmMenu(idBaHatMit, 0);
+                    if(isHaveMenu2)
+                        Service.gI().confirmMenu(idBaHatMit, (sbyte)menu2ID);
 
                     GameCanvas.menu.doCloseMenu();
                     ChatPopup.currChatPopup = null;
@@ -883,9 +895,9 @@ namespace Mod.Auto
                     }
 
                     Utilities.openMenu(idBaHatMit);
-                    Service.gI().confirmMenu(idBaHatMit, 1); 
-                    if (ServerListScreen.nameServer[Utilities.server].Contains("Otis") || ServerListScreen.nameServer[Utilities.server].Contains("Cumber"))
-                        Service.gI().confirmMenu(idBaHatMit, 0);
+                    Service.gI().confirmMenu(idBaHatMit, 1);
+                    if (isHaveMenu2)
+                        Service.gI().confirmMenu(idBaHatMit, (sbyte)menu2ID);
 
                     GameCanvas.menu.doCloseMenu();
                     ChatPopup.currChatPopup = null;
@@ -944,10 +956,7 @@ namespace Mod.Auto
             MyVector myVector = new MyVector();
             myVector.addElement(item);
             Service.gI().combine(1, myVector);
-            if(ServerListScreen.nameServer[Utilities.server].Contains("Otis") || ServerListScreen.nameServer[Utilities.server].Contains("Cumber"))
-                GameCanvas.gI().keyPressedz(-5);
-            else
-                Service.gI().confirmMenu(idBaHatMit, 0);
+            Service.gI().confirmMenu(idBaHatMit, 0);
         }
 
         public static void KhamSPL()
@@ -960,7 +969,7 @@ namespace Mod.Auto
                 return;
             }
 
-            if (Char.myCharz().luong <= 1000 && !ServerListScreen.nameServer[Utilities.server].Contains("Cumber"))
+            if (Char.myCharz().luong <= 1000)
             {
                 isKham = false;
                 GameScr.info1.addInfo("Thiếu ngọc", 0);
@@ -998,7 +1007,7 @@ namespace Mod.Auto
             myVector.addElement(item);
             myVector.addElement(spl);
             Service.gI().combine(1, myVector);
-            if (ServerListScreen.nameServer[Utilities.server].Contains("Otis") || ServerListScreen.nameServer[Utilities.server].Contains("Cumber"))
+            if (ServerListScreen.nameServer[Utilities.server].ToLower().Contains("kingcool"))
                 GameCanvas.gI().keyPressedz(-5);
             else
                 Service.gI().confirmMenu(idBaHatMit, 0);
@@ -1598,13 +1607,13 @@ namespace Mod.Auto
         {
             if (string.IsNullOrEmpty(ChatTextField.gI().tfChat.getText()) && string.IsNullOrEmpty(text))
                 return;
-            if (to == inputModMenuItemInts[5][0])
+            if (to == inputModMenuItemInts[6][0])
             {
                 try
                 {
                     int value = int.Parse(text);
                     if (value < 0 || value > 30) throw new Exception();
-                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[5];
+                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[6];
                     menuItem.setValue(value);
                     GameScr.info1.addInfo("Đã thay đổi số sao pha lê hoá tối đa!", 0);
                 }
@@ -1613,13 +1622,13 @@ namespace Mod.Auto
                     GameCanvas.startOKDlg("Số sao pha lê không hợp lệ!");
                 }
             }
-            else if (to == inputModMenuItemInts[6][0])
+            else if (to == inputModMenuItemInts[7][0])
             {
                 try
                 {
                     int value = int.Parse(text);
                     if (value < 0 || value > 1500) throw new Exception();
-                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[6];
+                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[7];
                     menuItem.setValue(value);
                     GameScr.info1.addInfo("Đã thay đổi id thỏi vàng!", 0);
                 }
@@ -1628,13 +1637,13 @@ namespace Mod.Auto
                     GameCanvas.startOKDlg("ID thỏi vàng không hợp lệ!");
                 }
             }
-            else if (to == inputModMenuItemInts[7][0])
+            else if (to == inputModMenuItemInts[8][0])
             {
                 try
                 {
                     int value = int.Parse(text);
                     if (value < 90000000 || value > 1000000000) throw new Exception();
-                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[7];
+                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[8];
                     menuItem.setValue(value);
                     GameScr.info1.addInfo("Đã thay đổi số vàng bắt đầu bán!", 0);
                 }
@@ -1643,34 +1652,19 @@ namespace Mod.Auto
                     GameCanvas.startOKDlg($"Số vàng phải lớn hơn {mSystem.numberTostring(90000000)} và nhỏ hơn {mSystem.numberTostring(1000000000)}!");
                 }
             }
-            else if (to == inputModMenuItemInts[8][0])
+            else if (to == inputModMenuItemInts[9][0])
             {
                 try
                 {
                     int value = int.Parse(text);
                     if (value < 0 || value > 200) throw new Exception();
-                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[8];
+                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[9];
                     menuItem.setValue(value);
                     GameScr.info1.addInfo("Đã thay đổi id npc nhận vàng tại đảo kame!", 0);
                 }
                 catch
                 {
                     GameCanvas.startOKDlg("ID NPC không hợp lệ!");
-                }
-            }
-            else if (to == inputModMenuItemInts[9][0])
-            {
-                try
-                {
-                    int value = int.Parse(text);
-                    if (value < 0 || value > 20) throw new Exception();
-                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[9];
-                    menuItem.setValue(value);
-                    GameScr.info1.addInfo("Đã thay đổi menu confirm nhận vàng!", 0);
-                }
-                catch
-                {
-                    GameCanvas.startOKDlg("Menu confirm không hợp lệ!");
                 }
             }
             else if (to == inputModMenuItemInts[10][0])
@@ -1681,7 +1675,7 @@ namespace Mod.Auto
                     if (value < 0 || value > 20) throw new Exception();
                     ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[10];
                     menuItem.setValue(value);
-                    GameScr.info1.addInfo("Đã thay đổi menu confirm nhận ngọc!", 0);
+                    GameScr.info1.addInfo("Đã thay đổi menu confirm nhận vàng!", 0);
                 }
                 catch
                 {
@@ -1696,7 +1690,7 @@ namespace Mod.Auto
                     if (value < 0 || value > 20) throw new Exception();
                     ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[11];
                     menuItem.setValue(value);
-                    GameScr.info1.addInfo("Đã thay đổi menu confirm mở chỉ số bông tai!", 0);
+                    GameScr.info1.addInfo("Đã thay đổi menu confirm nhận ngọc!", 0);
                 }
                 catch
                 {
@@ -1708,14 +1702,44 @@ namespace Mod.Auto
                 try
                 {
                     int value = int.Parse(text);
-                    if (value < 0 || value > 1000000) throw new Exception();
+                    if (value < 0 || value > 20) throw new Exception();
                     ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[12];
+                    menuItem.setValue(value);
+                    GameScr.info1.addInfo("Đã thay đổi menu confirm mở chỉ số bông tai!", 0);
+                }
+                catch
+                {
+                    GameCanvas.startOKDlg("Menu confirm không hợp lệ!");
+                }
+            }
+            else if (to == inputModMenuItemInts[13][0])
+            {
+                try
+                {
+                    int value = int.Parse(text);
+                    if (value < 0 || value > 1000000) throw new Exception();
+                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[13];
                     menuItem.setValue(value);
                     GameScr.info1.addInfo("Đã thay số lượng thỏi vàng sẽ bán!", 0);
                 }
                 catch
                 {
                     GameCanvas.startOKDlg("Số lượng không hợp lệ!");
+                }
+            }
+            else if (to == inputModMenuItemInts[14][0])
+            {
+                try
+                {
+                    int value = int.Parse(text);
+                    if (value < 0 || value > 20) throw new Exception();
+                    ModMenuItemInt menuItem = (ModMenuItemInt)tabItem[14];
+                    menuItem.setValue(value);
+                    GameScr.info1.addInfo("Đã thay đổi menu pha lê hoá cấp 2!", 0);
+                }
+                catch
+                {
+                    GameCanvas.startOKDlg("Menu confirm không hợp lệ!");
                 }
             }
             else if (to == epNRCaption)
@@ -1742,7 +1766,7 @@ namespace Mod.Auto
                                 ChatPopup.currChatPopup = null;
                                 SoLuongEp = int.Parse(text.Trim());
                                 isEpNR = true;
-                                AutoUpgrade.toggle(true);
+                                toggle(true);
                                 break;
                             }
                             id++;
@@ -1767,7 +1791,47 @@ namespace Mod.Auto
                     Service.gI().confirmMenu(21, npccsbt);
                     paramPorataRequest = int.Parse(text.Trim());
                     isMoCSBT = true;
-                    AutoUpgrade.toggle(true);
+                    toggle(true);
+
+                }
+                catch (Exception)
+                {
+                    GameScr.info1.addInfo("Đã xảy ra lỗi!", 0);
+                }
+            }
+            else if (to == "Nhập id vật phẩm dùng để khảm")
+            {
+                try
+                {
+                    idSPL = (short)int.Parse(text.Trim());
+                    Utilities.openMenu(21);
+                    Service.gI().confirmMenu(21, 0);
+                    GameCanvas.menu.doCloseMenu();
+                    ChatPopup.currChatPopup = null;
+                    isKham = true;
+                    toggle(true);
+
+                    //new Thread(delegate ()
+                    //{
+                    //    while (TileMap.mapID != 5)
+                    //        if (!XmapController.gI.IsActing)
+                    //            XmapController.start(5);
+
+                    //    while (Char.isLoadingMap || Char.ischangingMap)
+                    //        Thread.Sleep(500);
+
+                    //    Thread.Sleep(500);
+                    //    Utilities.openMenu(21);
+                    //    Service.gI().confirmMenu(21, 0);
+                    //    GameCanvas.menu.doCloseMenu();
+                    //    ChatPopup.currChatPopup = null;
+                    //    isKham = true;
+                    //    toggle(true);
+                    //})
+                    //{
+                    //    IsBackground = true,
+                    //    Name = "GotoDaoKame"
+                    //}.Start();
 
                 }
                 catch (Exception)

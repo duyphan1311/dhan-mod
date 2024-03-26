@@ -19,7 +19,7 @@ namespace Mod.OnScreenPaint
             try
             {
                 LineBoss(g, cmx, cmy);
-                ThongTinChucNang(g);
+                //ThongTinChucNang(g);
             }
             catch (Exception e)
             {

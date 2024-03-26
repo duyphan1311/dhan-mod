@@ -164,6 +164,22 @@ namespace Mod.Auto
                 case 4:
                     startChat("Giáp", plusPointDefTitle);
                     break;
+                case 6:
+                    isPlusPointHP = false;
+                    GameScr.info1.addInfo("Đã dừng tự động cộng HP!", 0);
+                    break;
+                case 7:
+                    isPlusPointMP = false;
+                    GameScr.info1.addInfo("Đã dừng tự động cộng KI!", 0);
+                    break;
+                case 8:
+                    isPlusPointSD = false;
+                    GameScr.info1.addInfo("Đã dừng tự động cộng Sức đánh!", 0);
+                    break;
+                case 9:
+                    isPlusPointDef = false;
+                    GameScr.info1.addInfo("Đã dừng tự động cộng Giáp!", 0);
+                    break;
             }
         }
 

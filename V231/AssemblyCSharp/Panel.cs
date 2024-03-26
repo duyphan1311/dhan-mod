@@ -7,6 +7,7 @@ using Mod.Auto;
 using Mod.CustomPanel;
 using Mod.Graphics;
 using Mod.Messenger;
+using Mod.ModHelper.Menu;
 using Mod.ModMenu;
 using Mod.OnScreenPaint;
 using Mod.TeleportMenu;
@@ -8376,123 +8377,159 @@ public class Panel : IActionListener, IChatable
 			int num2 = 1000;
 			if (selected == 0)
 			{
-				if (cTiemNang < Char.myCharz().cHPGoc + num2)
+				#region mod
+				if (AutoPlusPoint.isPlusPointHP)
 				{
-					GameCanvas.startOKDlg(mResources.not_enough_potential_point1 + Char.myCharz().cTiemNang + mResources.not_enough_potential_point2 + (Char.myCharz().cHPGoc + num2));
-					return;
+					MyVector v = new MyVector(string.Empty);
+					v.addElement(new Command("Dừng Auto", AutoPlusPoint.gI, 6, null));
+					GameCanvas.menu.startAt(v, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
 				}
-				if (cTiemNang > cHPGoc && cTiemNang < 10 * (2 * (cHPGoc + num2) + 180) / 2)
+				else
 				{
-					GameCanvas.startYesNoDlg(mResources.use_potential_point_for1 + (cHPGoc + num2) + mResources.use_potential_point_for2 + Char.myCharz().hpFrom1000TiemNang + mResources.for_HP, new Command(mResources.increase_upper, this, 9000, null), new Command(mResources.CANCEL, this, 4007, null));
-					return;
+					if (cTiemNang < Char.myCharz().cHPGoc + num2)
+					{
+						GameCanvas.startOKDlg(mResources.not_enough_potential_point1 + Char.myCharz().cTiemNang + mResources.not_enough_potential_point2 + (Char.myCharz().cHPGoc + num2));
+						return;
+					}
+					if (cTiemNang > cHPGoc && cTiemNang < 10 * (2 * (cHPGoc + num2) + 180) / 2)
+					{
+						GameCanvas.startYesNoDlg(mResources.use_potential_point_for1 + (cHPGoc + num2) + mResources.use_potential_point_for2 + Char.myCharz().hpFrom1000TiemNang + mResources.for_HP, new Command(mResources.increase_upper, this, 9000, null), new Command(mResources.CANCEL, this, 4007, null));
+						return;
+					}
+					if (cTiemNang >= 10 * (2 * (cHPGoc + num2) + 180) / 2 && cTiemNang < 100 * (2 * (cHPGoc + num2) + 1980) / 2)
+					{
+						MyVector myVector = new MyVector(string.Empty);
+						myVector.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().hpFrom1000TiemNang + mResources.HP + "\n-" + Res.formatNumber2(cHPGoc + num2), this, 9000, null));
+						myVector.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().hpFrom1000TiemNang + mResources.HP + "\n-" + Res.formatNumber2(10 * (2 * (cHPGoc + num2) + 180) / 2), this, 9006, null));
+						GameCanvas.menu.startAt(myVector, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+						addSkillDetail2(selected);
+					}
+					if (cTiemNang >= 100 * (2 * (cHPGoc + num2) + 1980) / 2)
+					{
+						MyVector myVector2 = new MyVector(string.Empty);
+						myVector2.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().hpFrom1000TiemNang + mResources.HP + "\n-" + Res.formatNumber2(cHPGoc + num2), this, 9000, null));
+						myVector2.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().hpFrom1000TiemNang + mResources.HP + "\n-" + Res.formatNumber2(10 * (2 * (cHPGoc + num2) + 180) / 2), this, 9006, null));
+						myVector2.addElement(new Command(mResources.increase_upper + "\n" + 100 * Char.myCharz().hpFrom1000TiemNang + mResources.HP + "\n-" + Res.formatNumber2(100 * (2 * (cHPGoc + num2) + 1980) / 2), this, 9007, null));
+						myVector2.addElement(new Command("Tăng nhiều", AutoPlusPoint.gI, 1, null));
+						GameCanvas.menu.startAt(myVector2, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+						addSkillDetail2(selected);
+					}
 				}
-				if (cTiemNang >= 10 * (2 * (cHPGoc + num2) + 180) / 2 && cTiemNang < 100 * (2 * (cHPGoc + num2) + 1980) / 2)
-				{
-					MyVector myVector = new MyVector(string.Empty);
-					myVector.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().hpFrom1000TiemNang + mResources.HP + "\n-" + Res.formatNumber2(cHPGoc + num2), this, 9000, null));
-					myVector.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().hpFrom1000TiemNang + mResources.HP + "\n-" + Res.formatNumber2(10 * (2 * (cHPGoc + num2) + 180) / 2), this, 9006, null));
-					GameCanvas.menu.startAt(myVector, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
-					addSkillDetail2(selected);
-				}
-				if (cTiemNang >= 100 * (2 * (cHPGoc + num2) + 1980) / 2)
-				{
-					MyVector myVector2 = new MyVector(string.Empty);
-					myVector2.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().hpFrom1000TiemNang + mResources.HP + "\n-" + Res.formatNumber2(cHPGoc + num2), this, 9000, null));
-					myVector2.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().hpFrom1000TiemNang + mResources.HP + "\n-" + Res.formatNumber2(10 * (2 * (cHPGoc + num2) + 180) / 2), this, 9006, null));
-					myVector2.addElement(new Command(mResources.increase_upper + "\n" + 100 * Char.myCharz().hpFrom1000TiemNang + mResources.HP + "\n-" + Res.formatNumber2(100 * (2 * (cHPGoc + num2) + 1980) / 2), this, 9007, null));
-					#region mod
-					myVector2.addElement(new Command("Tăng nhiều", AutoPlusPoint.gI, 1, null));
-					#endregion
-					GameCanvas.menu.startAt(myVector2, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
-					addSkillDetail2(selected);
-				}
+				#endregion
 			}
 			if (selected == 1)
 			{
-				if (Char.myCharz().cTiemNang < Char.myCharz().cMPGoc + num2)
+				#region mod
+				if (AutoPlusPoint.isPlusPointMP)
 				{
-					GameCanvas.startOKDlg(mResources.not_enough_potential_point1 + Char.myCharz().cTiemNang + mResources.not_enough_potential_point2 + (Char.myCharz().cMPGoc + num2));
-					return;
+					MyVector v = new MyVector(string.Empty);
+					v.addElement(new Command("Dừng Auto", AutoPlusPoint.gI, 7, null));
+					GameCanvas.menu.startAt(v, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
 				}
-				if (cTiemNang > cMPGoc && cTiemNang < 10 * (2 * (cMPGoc + num2) + 180) / 2)
+				else
 				{
-					GameCanvas.startYesNoDlg(mResources.use_potential_point_for1 + (cMPGoc + num2) + mResources.use_potential_point_for2 + Char.myCharz().mpFrom1000TiemNang + mResources.for_KI, new Command(mResources.increase_upper, this, 9000, null), new Command(mResources.CANCEL, this, 4007, null));
-					return;
+					if (Char.myCharz().cTiemNang < Char.myCharz().cMPGoc + num2)
+					{
+						GameCanvas.startOKDlg(mResources.not_enough_potential_point1 + Char.myCharz().cTiemNang + mResources.not_enough_potential_point2 + (Char.myCharz().cMPGoc + num2));
+						return;
+					}
+					if (cTiemNang > cMPGoc && cTiemNang < 10 * (2 * (cMPGoc + num2) + 180) / 2)
+					{
+						GameCanvas.startYesNoDlg(mResources.use_potential_point_for1 + (cMPGoc + num2) + mResources.use_potential_point_for2 + Char.myCharz().mpFrom1000TiemNang + mResources.for_KI, new Command(mResources.increase_upper, this, 9000, null), new Command(mResources.CANCEL, this, 4007, null));
+						return;
+					}
+					if (cTiemNang >= 10 * (2 * (cMPGoc + num2) + 180) / 2 && cTiemNang < 100 * (2 * (cMPGoc + num2) + 1980) / 2)
+					{
+						MyVector myVector3 = new MyVector(string.Empty);
+						myVector3.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().mpFrom1000TiemNang + mResources.KI + "\n-" + Res.formatNumber2(cHPGoc + num2), this, 9000, null));
+						myVector3.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().mpFrom1000TiemNang + mResources.KI + "\n-" + Res.formatNumber2(10 * (2 * (cHPGoc + num2) + 180) / 2), this, 9006, null));
+						GameCanvas.menu.startAt(myVector3, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+						addSkillDetail2(selected);
+					}
+					if (cTiemNang >= 100 * (2 * (cMPGoc + num2) + 1980) / 2)
+					{
+						MyVector myVector4 = new MyVector(string.Empty);
+						myVector4.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().mpFrom1000TiemNang + mResources.KI + "\n-" + Res.formatNumber2(cMPGoc + num2), this, 9000, null));
+						myVector4.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().mpFrom1000TiemNang + mResources.KI + "\n-" + Res.formatNumber2(10 * (2 * (cMPGoc + num2) + 180) / 2), this, 9006, null));
+						myVector4.addElement(new Command(mResources.increase_upper + "\n" + 100 * Char.myCharz().mpFrom1000TiemNang + mResources.KI + "\n-" + Res.formatNumber2(100 * (2 * (cMPGoc + num2) + 1980) / 2), this, 9007, null));
+						myVector4.addElement(new Command("Tăng nhiều", AutoPlusPoint.gI, 2, null));
+						GameCanvas.menu.startAt(myVector4, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+						addSkillDetail2(selected);
+					}
 				}
-				if (cTiemNang >= 10 * (2 * (cMPGoc + num2) + 180) / 2 && cTiemNang < 100 * (2 * (cMPGoc + num2) + 1980) / 2)
-				{
-					MyVector myVector3 = new MyVector(string.Empty);
-					myVector3.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().mpFrom1000TiemNang + mResources.KI + "\n-" + Res.formatNumber2(cHPGoc + num2), this, 9000, null));
-					myVector3.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().mpFrom1000TiemNang + mResources.KI + "\n-" + Res.formatNumber2(10 * (2 * (cHPGoc + num2) + 180) / 2), this, 9006, null));
-					GameCanvas.menu.startAt(myVector3, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
-					addSkillDetail2(selected);
-				}
-				if (cTiemNang >= 100 * (2 * (cMPGoc + num2) + 1980) / 2)
-				{
-					MyVector myVector4 = new MyVector(string.Empty);
-					myVector4.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().mpFrom1000TiemNang + mResources.KI + "\n-" + Res.formatNumber2(cMPGoc + num2), this, 9000, null));
-					myVector4.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().mpFrom1000TiemNang + mResources.KI + "\n-" + Res.formatNumber2(10 * (2 * (cMPGoc + num2) + 180) / 2), this, 9006, null));
-					myVector4.addElement(new Command(mResources.increase_upper + "\n" + 100 * Char.myCharz().mpFrom1000TiemNang + mResources.KI + "\n-" + Res.formatNumber2(100 * (2 * (cMPGoc + num2) + 1980) / 2), this, 9007, null));
-					#region mod
-					myVector4.addElement(new Command("Tăng nhiều", AutoPlusPoint.gI, 2, null));
-					#endregion
-					GameCanvas.menu.startAt(myVector4, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
-					addSkillDetail2(selected);
-				}
+				#endregion
 			}
 			if (selected == 2)
 			{
-				if (Char.myCharz().cTiemNang < Char.myCharz().cDamGoc * Char.myCharz().expForOneAdd)
+				#region mod
+				if (AutoPlusPoint.isPlusPointSD)
+                {
+                    MyVector v = new MyVector(string.Empty);
+                    v.addElement(new Command("Dừng Auto", AutoPlusPoint.gI, 8, null));
+                    GameCanvas.menu.startAt(v, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+                }
+				else
 				{
-					GameCanvas.startOKDlg(mResources.not_enough_potential_point1 + Char.myCharz().cTiemNang + mResources.not_enough_potential_point2 + cDamGoc * 100);
-					return;
+					if (Char.myCharz().cTiemNang < Char.myCharz().cDamGoc * Char.myCharz().expForOneAdd)
+					{
+						GameCanvas.startOKDlg(mResources.not_enough_potential_point1 + Char.myCharz().cTiemNang + mResources.not_enough_potential_point2 + cDamGoc * 100);
+						return;
+					}
+					if (cTiemNang > cDamGoc && cTiemNang < 10 * (2 * cDamGoc + 9) / 2 * Char.myCharz().expForOneAdd)
+					{
+						GameCanvas.startYesNoDlg(mResources.use_potential_point_for1 + cDamGoc * 100 + mResources.use_potential_point_for2 + Char.myCharz().damFrom1000TiemNang + mResources.for_hit_point, new Command(mResources.increase_upper, this, 9000, null), new Command(mResources.CANCEL, this, 4007, null));
+						return;
+					}
+					if (cTiemNang >= 10 * (2 * cDamGoc + 9) / 2 * Char.myCharz().expForOneAdd && cTiemNang < 100 * (2 * cDamGoc + 99) / 2 * Char.myCharz().expForOneAdd)
+					{
+						MyVector myVector5 = new MyVector(string.Empty);
+						myVector5.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().damFrom1000TiemNang + "\n" + mResources.hit_point + "\n-" + Res.formatNumber2(cDamGoc * 100), this, 9000, null));
+						myVector5.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().damFrom1000TiemNang + "\n" + mResources.hit_point + "\n-" + Res.formatNumber2(10 * (2 * cDamGoc + 9) / 2 * Char.myCharz().expForOneAdd), this, 9006, null));
+						GameCanvas.menu.startAt(myVector5, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+						addSkillDetail2(selected);
+					}
+					if (cTiemNang >= 100 * (2 * cDamGoc + 99) / 2 * Char.myCharz().expForOneAdd)
+					{
+						MyVector myVector6 = new MyVector(string.Empty);
+						myVector6.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().damFrom1000TiemNang + "\n" + mResources.hit_point + "\n-" + Res.formatNumber2(cDamGoc * 100), this, 9000, null));
+						myVector6.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().damFrom1000TiemNang + "\n" + mResources.hit_point + "\n-" + Res.formatNumber2(10 * (2 * cDamGoc + 9) / 2 * Char.myCharz().expForOneAdd), this, 9006, null));
+						myVector6.addElement(new Command(mResources.increase_upper + "\n" + 100 * Char.myCharz().damFrom1000TiemNang + "\n" + mResources.hit_point + "\n-" + Res.formatNumber2(100 * (2 * cDamGoc + 99) / 2 * Char.myCharz().expForOneAdd), this, 9007, null));
+						myVector6.addElement(new Command("Tăng nhiều", AutoPlusPoint.gI, 3, null));
+						GameCanvas.menu.startAt(myVector6, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+						addSkillDetail2(selected);
+					}
 				}
-				if (cTiemNang > cDamGoc && cTiemNang < 10 * (2 * cDamGoc + 9) / 2 * Char.myCharz().expForOneAdd)
-				{
-					GameCanvas.startYesNoDlg(mResources.use_potential_point_for1 + cDamGoc * 100 + mResources.use_potential_point_for2 + Char.myCharz().damFrom1000TiemNang + mResources.for_hit_point, new Command(mResources.increase_upper, this, 9000, null), new Command(mResources.CANCEL, this, 4007, null));
-					return;
-				}
-				if (cTiemNang >= 10 * (2 * cDamGoc + 9) / 2 * Char.myCharz().expForOneAdd && cTiemNang < 100 * (2 * cDamGoc + 99) / 2 * Char.myCharz().expForOneAdd)
-				{
-					MyVector myVector5 = new MyVector(string.Empty);
-					myVector5.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().damFrom1000TiemNang + "\n" + mResources.hit_point + "\n-" + Res.formatNumber2(cDamGoc * 100), this, 9000, null));
-					myVector5.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().damFrom1000TiemNang + "\n" + mResources.hit_point + "\n-" + Res.formatNumber2(10 * (2 * cDamGoc + 9) / 2 * Char.myCharz().expForOneAdd), this, 9006, null));
-					GameCanvas.menu.startAt(myVector5, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
-					addSkillDetail2(selected);
-				}
-				if (cTiemNang >= 100 * (2 * cDamGoc + 99) / 2 * Char.myCharz().expForOneAdd)
-				{
-					MyVector myVector6 = new MyVector(string.Empty);
-					myVector6.addElement(new Command(mResources.increase_upper + "\n" + Char.myCharz().damFrom1000TiemNang + "\n" + mResources.hit_point + "\n-" + Res.formatNumber2(cDamGoc * 100), this, 9000, null));
-					myVector6.addElement(new Command(mResources.increase_upper + "\n" + 10 * Char.myCharz().damFrom1000TiemNang + "\n" + mResources.hit_point + "\n-" + Res.formatNumber2(10 * (2 * cDamGoc + 9) / 2 * Char.myCharz().expForOneAdd), this, 9006, null));
-					myVector6.addElement(new Command(mResources.increase_upper + "\n" + 100 * Char.myCharz().damFrom1000TiemNang + "\n" + mResources.hit_point + "\n-" + Res.formatNumber2(100 * (2 * cDamGoc + 99) / 2 * Char.myCharz().expForOneAdd), this, 9007, null));
-					#region mod
-					myVector6.addElement(new Command("Tăng nhiều", AutoPlusPoint.gI, 3, null));
-					#endregion
-					GameCanvas.menu.startAt(myVector6, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
-					addSkillDetail2(selected);
-				}
+				#endregion
 			}
 			if (selected == 3)
 			{
-				if (Char.myCharz().cTiemNang < 50000 + Char.myCharz().cDefGoc * 1000)
-				{
-					GameCanvas.startOKDlg(mResources.not_enough_potential_point1 + NinjaUtil.getMoneys(Char.myCharz().cTiemNang) + mResources.not_enough_potential_point2 + NinjaUtil.getMoneys(50000 + Char.myCharz().cDefGoc * 1000));
-					return;
-				}
-				long number = (long)(2 * (cDefGoc + 5)) / 2L * 100000;
-				long number2 = 10L * (long)(2 * (cDefGoc + 5) + 9) / 2 * 100000;
-				long number3 = 100L * (long)(2 * (cDefGoc + 5) + 99) / 2 * 100000;
-				mResources.use_potential_point_for1 = mResources.increase_upper;
-				MyVector myVector7 = new MyVector(string.Empty);
-				myVector7.addElement(new Command(mResources.use_potential_point_for1 + "\n1 " + mResources.armor + "\n" + Res.formatNumber2(number), this, 9000, null));
-				myVector7.addElement(new Command(mResources.use_potential_point_for1 + "\n10 " + mResources.armor + "\n" + Res.formatNumber2(number2), this, 9006, null));
-				myVector7.addElement(new Command(mResources.use_potential_point_for1 + "\n100 " + mResources.armor + "\n" + Res.formatNumber2(number3), this, 9007, null));
 				#region mod
-				myVector7.addElement(new Command("Tăng nhiều", AutoPlusPoint.gI, 4, null));
+				if (AutoPlusPoint.isPlusPointDef)
+                {
+                    MyVector v = new MyVector(string.Empty);
+                    v.addElement(new Command("Dừng Auto", AutoPlusPoint.gI, 9, null));
+                    GameCanvas.menu.startAt(v, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+                }
+				else
+				{
+					if (Char.myCharz().cTiemNang < 50000 + Char.myCharz().cDefGoc * 1000)
+					{
+						GameCanvas.startOKDlg(mResources.not_enough_potential_point1 + NinjaUtil.getMoneys(Char.myCharz().cTiemNang) + mResources.not_enough_potential_point2 + NinjaUtil.getMoneys(50000 + Char.myCharz().cDefGoc * 1000));
+						return;
+					}
+					long number = (long)(2 * (cDefGoc + 5)) / 2L * 100000;
+					long number2 = 10L * (long)(2 * (cDefGoc + 5) + 9) / 2 * 100000;
+					long number3 = 100L * (long)(2 * (cDefGoc + 5) + 99) / 2 * 100000;
+					mResources.use_potential_point_for1 = mResources.increase_upper;
+					MyVector myVector7 = new MyVector(string.Empty);
+					myVector7.addElement(new Command(mResources.use_potential_point_for1 + "\n1 " + mResources.armor + "\n" + Res.formatNumber2(number), this, 9000, null));
+					myVector7.addElement(new Command(mResources.use_potential_point_for1 + "\n10 " + mResources.armor + "\n" + Res.formatNumber2(number2), this, 9006, null));
+					myVector7.addElement(new Command(mResources.use_potential_point_for1 + "\n100 " + mResources.armor + "\n" + Res.formatNumber2(number3), this, 9007, null));
+					myVector7.addElement(new Command("Tăng nhiều", AutoPlusPoint.gI, 4, null));
+					GameCanvas.menu.startAt(myVector7, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+					addSkillDetail2(selected);
+				}
 				#endregion
-				GameCanvas.menu.startAt(myVector7, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
-				addSkillDetail2(selected);
 			}
 			else if (selected == 4)
 			{

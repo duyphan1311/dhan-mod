@@ -47,6 +47,8 @@ namespace Mod.Auto
                     if (AutoUpgrade.isMoCSBT)
                     {
                         AutoUpgrade.isMoCSBT = false;
+                        AutoUpgrade.idBag1 = 0;
+                        AutoUpgrade.idBag2 = 0;
                         GameScr.info1.addInfo("Đã Dừng", 0);
                     }
                     if (AutoUpgrade.isPLH)
@@ -64,6 +66,8 @@ namespace Mod.Auto
                     if (AutoUpgrade.isNCTB)
                     {
                         AutoUpgrade.isNCTB = false;
+                        AutoUpgrade.idBag1 = 0;
+                        AutoUpgrade.idBag2 = 0;
                         GameScr.info1.addInfo("Đã Dừng", 0);
                     }
                     if (AutoUpgrade.isEpNR)

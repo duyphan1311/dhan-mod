@@ -195,9 +195,6 @@ namespace Mod.PickMob
                         if (myChar.skillInfoPaint() == null)
                         {
                             Skill skill = GetSkillAttack();
-                            if (mSystem.currentTimeMillis() - skill.lastTimeUseThisSkill < skill.coolDown + 100L)
-                                return;
-                            skill.lastTimeUseThisSkill = mSystem.currentTimeMillis();
                             if (skill != null && !skill.paintCanNotUseSkill)
                             {
                                 Mob mobFocus = myChar.mobFocus;
@@ -210,7 +207,7 @@ namespace Mod.PickMob
                                 GameScr.gI().doSelectSkill(skill, true);
                                 if (Math.abs(Char.myCharz().cx - mobFocus.x) > 100)
                                 {
-                                    if(mode == TanSatMod.TeleToMob)
+                                    if (mode == TanSatMod.TeleToMob)
                                         Utilities.teleportMyChar(mobFocus.xFirst, mobFocus.yFirst);
                                     else
                                         Move(mobFocus.xFirst, mobFocus.yFirst);
@@ -223,6 +220,37 @@ namespace Mod.PickMob
                                 }
                             }
                         }
+                        //if (myChar.skillInfoPaint() == null)
+                        //{
+                        //    Skill skill = GetSkillAttack();
+                        //    if (mSystem.currentTimeMillis() - skill.lastTimeUseThisSkill < skill.coolDown + 100L)
+                        //        return;
+                        //    skill.lastTimeUseThisSkill = mSystem.currentTimeMillis();
+                        //    if (skill != null && !skill.paintCanNotUseSkill)
+                        //    {
+                        //        Mob mobFocus = myChar.mobFocus;
+                        //        mobFocus.x = mobFocus.xFirst;
+                        //        mobFocus.y = mobFocus.yFirst;
+
+                        //        MyVector myVector = new MyVector();
+                        //        myVector.addElement(mobFocus);
+
+                        //        GameScr.gI().doSelectSkill(skill, true);
+                        //        if (Math.abs(Char.myCharz().cx - mobFocus.x) > 100)
+                        //        {
+                        //            if(mode == TanSatMod.TeleToMob)
+                        //                Utilities.teleportMyChar(mobFocus.xFirst, mobFocus.yFirst);
+                        //            else
+                        //                Move(mobFocus.xFirst, mobFocus.yFirst);
+
+                        //        }
+                        //        if (Utilities.getDistance(Char.myCharz(), mobFocus) <= 50)
+                        //        {
+                        //            //Utilities.DoDoubleClickToObj(mobFocus);
+                        //            Service.gI().sendPlayerAttack(myVector, new MyVector(), -1);
+                        //        }
+                        //    }
+                        //}
                     }
                     else if (!isUseTDLT)
                     {

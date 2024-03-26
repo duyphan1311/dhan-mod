@@ -110,8 +110,8 @@ public class Controller : IMessageHandler
 	}
 
 	public void onMessage(Message msg)
-	{
-		GameCanvas.debugSession.removeAllElements();
+    {
+        GameCanvas.debugSession.removeAllElements();
 		GameCanvas.debug("SA1", 2);
 		try
 		{

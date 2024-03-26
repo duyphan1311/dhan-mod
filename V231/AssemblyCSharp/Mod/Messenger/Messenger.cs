@@ -1,20 +1,9 @@
-﻿using Assets.src.g;
-using LitJson;
-using Mod.Auto;
-using Mod.Auto.AutoChat;
+﻿using LitJson;
 using Mod.CustomPanel;
-using Mod.ModHelper.CommandMod.Chat;
 using Mod.ModHelper.Menu;
-using Mod.Set;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using static Mod.Auto.AutoChat.Setup;
 
 namespace Mod.Messenger
 {

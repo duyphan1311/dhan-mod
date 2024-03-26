@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Mod.MenuOnscreen
 {
-    internal class MenuMain : IChatable
+    internal class MenuMain : IChatable, IActionListener
     {
         [HotkeyCommand('z')]
         public static void show()
@@ -23,6 +23,7 @@ namespace Mod.MenuOnscreen
                     "Tắt\ntàn sát", new(() =>
                     {
                         Pk9rPickMob.IsTanSat = false;
+                        if (Pk9rPickMob.TypeMobsTanSat.Count > 0 && !Pk9rPickMob.IsTanSat) Pk9rPickMob.TypeMobsTanSat.Clear();
                         GameScr.info1.addInfo("Đã tắt tàn sát!", 0);
                     }))
                 .addItem("Tàn sát", new(showMenuTanSat))
@@ -34,7 +35,7 @@ namespace Mod.MenuOnscreen
                 .addItem("Auto vứt\nvật phẩm", new(AutoGetItemOut.ShowMenu))
                 .addItem("Vòng quay", new(AutoCrackBall.ShowMenu))
                 //.addItem("NPC", new(Utilities.showMenuTeleNpc))
-                //.addItem("Rương đồ", new(() => Service.gI().openMenu(3)))
+                .addItem("Rương đồ", new(() => Service.gI().openMenu(3)))
                 .start();
 
         }
@@ -46,10 +47,11 @@ namespace Mod.MenuOnscreen
                     "Tắt\ntàn sát", new(() =>
                     {
                         Pk9rPickMob.IsTanSat = false;
+                        if (Pk9rPickMob.TypeMobsTanSat.Count > 0 && !Pk9rPickMob.IsTanSat) Pk9rPickMob.TypeMobsTanSat.Clear();
                         GameScr.info1.addInfo("Đã tắt tàn sát!", 0);
                     }));
-            if (GameScr.vMob.size() > 0)
-                menuBuilder.addItem("Tất cả", new(() =>
+            menuBuilder.addItem(ifCondition: GameScr.vMob.size() > 0, 
+                "Tất cả", new(() =>
                 {
                     Pk9rPickMob.IsTanSat = true;
                     if (Pk9rPickMob.TypeMobsTanSat.Count > 0) Pk9rPickMob.TypeMobsTanSat.Clear();
@@ -95,6 +97,62 @@ namespace Mod.MenuOnscreen
         public void onCancelChat()
         {
             GameCanvas.panel.chatTField.ResetTF();
+        }
+
+        public void perform(int idAction, object p)
+        {
+
+            if (idAction == 0)
+            {
+                Item item = (Item)p;
+                bool HasItemInListUse = AutoUseItem.listItemUse.Any(x => (item.template.id == x.item.template.id && item.GetFullInfo() == x.item.GetFullInfo()));
+                bool HasItemInListUpgrade = AutoUpgrade.listUpgrade.Any(x => ((GameCanvas.panel.selected - Char.myCharz().arrItemBody.Length) == x.id && item.template.type == x.type && item.template.name == x.name));
+
+                var menuBuilder = new MenuBuilder();
+                if (item.isTypeBody())
+                {
+
+                    if (item.template.type == 32 || item.template.type == 11 ||
+                        item.template.type == 72 || item.template.type == 23 || item.template.type == 27 ||
+                        (item.template.type >= 0 && item.template.type <= 5))
+                    {
+                        if (HasItemInListUpgrade)
+                            menuBuilder.addItem("Loại khỏi\nList Upgrade", new(() => AutoUpgrade.gI.perform(1, item)));
+                        else
+                            menuBuilder.addItem("Thêm vào\nList Upgrade", new(() => AutoUpgrade.gI.perform(1, item)));
+                    }
+                }
+                else
+                {
+
+                    if (AutoUseItem.listItemUse.Count <= 0)
+                    {
+                        menuBuilder.addItem("Dùng liên tục", new(() => AutoUseItem.gI.perform(1, item)));
+                    }
+                    else
+                    {
+                        if (HasItemInListUse)
+                            menuBuilder.addItem("Kết thúc", new(() => AutoUseItem.gI.perform(2, item)));
+                        else
+                            menuBuilder.addItem("Dùng liên tục", new(() => AutoUseItem.gI.perform(1, item)));
+                    }
+                    if (item.template.id == 457)
+                    {
+                        if (AutoSellGold.isBanVang)
+                            menuBuilder.addItem("Kết thúc", new(() => AutoSellGold.gI.perform(2, null)));
+                        else
+                            menuBuilder.addItem("Auto bán", new(() => AutoSellGold.gI.perform(1, null)));
+                    }
+                    if ((item.template.type == 11 || item.template.type == 72 || item.template.type == 23 || item.template.type == 27) && item.template.id != 457)
+                    {
+                        if (HasItemInListUpgrade)
+                            menuBuilder.addItem("Loại khỏi\nList Upgrade", new(() => AutoUpgrade.gI.perform(1, item)));
+                        else
+                            menuBuilder.addItem("Thêm vào\nList Upgrade", new(() => AutoUpgrade.gI.perform(1, item)));
+                    }
+                }
+                menuBuilder.start();
+            }
         }
     }
 }

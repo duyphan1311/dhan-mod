@@ -326,6 +326,16 @@ namespace Mod
                 AutoGetItemOut.update();
             if (GameCanvas.gameTick % (int)(10 * Time.timeScale) == 0 && Utilities.IsAutoFlag) Utilities.AutoFlag();
             if (GameCanvas.gameTick % (int)(10 * Time.timeScale) == 0 && Setup.isPutDelay) Setup.update();
+            if (GameCanvas.gameTick % (int)(10 * Time.timeScale) == 0 && Utilities.isBackToOldZone)
+            {
+                if (!Utilities.isLogin)
+                {
+                    Utilities.oldMap = TileMap.mapID;
+                    Utilities.oldZone = TileMap.zoneID;
+                }
+                else
+                    new Thread(new ThreadStart(Utilities.BackToOldZone)).Start();
+            }
             Char.myCharz().cspeed = Utilities.speedRun;
             Time.timeScale = Utilities.speedGame;
             CharEffect.Update();
@@ -345,6 +355,7 @@ namespace Mod
             PetInfo.update();
             SetDo.Update();
             if (!isALogin) isALogin = true;
+            if (!Utilities.isLogin) Utilities.isLogin = false;
             //NOTE onUpdateChatTextField không thể bấm tab.
             if (ChatTextField.gI().strChat.Replace(" ", "") != "Chat" || ChatTextField.gI().tfChat.name != "chat") return;
             HistoryChat.gI.update();
@@ -400,11 +411,13 @@ namespace Mod
                 GameCanvas.loginScr = new LoginScr();
             }
             GameCanvas.loginScr.switchToMe();
-            Service.gI().login("", "", GameMidlet.VERSION, 0);
-            //GameCanvas.startWaitDlg();
+            Service.gI().setClientType();
+            Service.gI().login(Utilities.username, Utilities.password, GameMidlet.VERSION, 0);
+            LoginScr.serverName = ServerListScreen.nameServer[Utilities.server];
             TeleportMenu.TeleportMenu.LoadData();
             AutoPet.isFirstTimeCkeckPet = true;
             xskill = true;
+            Utilities.isLogin = true;
             ExtensionManager.Invoke();
         }
 

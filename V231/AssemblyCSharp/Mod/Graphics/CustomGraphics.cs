@@ -1,6 +1,7 @@
 ﻿using Mod.ModMenu;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using UnityEngine;
 
 namespace Mod.Graphics
@@ -185,7 +186,10 @@ namespace Mod.Graphics
                 x -= mFont.tahoma_7b_red.getWidth("$") + 2;
             }
             if (Utilities.HasStarOption(item, out uint star, out uint starE))
+            {
                 PaintStarOption(g, x, y, star, starE);
+                PaintDetailOption(g, x, y, instance, item);
+            }
         }
 
         static void PaintStarOption(mGraphics g, int x, int y, uint star, uint starE)
@@ -206,6 +210,47 @@ namespace Mod.Graphics
                 {
                     mFont.tahoma_7b_red.drawString(g, starE.ToString(), x - mFont.tahoma_7b_red.getWidth(starE.ToString() + star.ToString()) - Image.getImageWidth(Panel.imgMaxStar) * 2 - 2, y, mFont.LEFT);
                     g.drawImage(Panel.imgMaxStar, x - mFont.tahoma_7b_red.getWidth(starE.ToString()) - Image.getImageWidth(Panel.imgMaxStar) * 2 - 3, y + 1);
+                }
+            }
+        }
+
+        static void PaintDetailOption(mGraphics g, int x, int y, Panel panel, Item item)
+        {
+            string text = string.Empty;
+            Dictionary<int, string> options = new Dictionary<int, string>()
+            {
+                { 50, "SĐ" }, { 77, "HP" }, { 103, "KI" }, { 101, "EXP" }, { 94, "Giáp" },
+                { 108, "Né" }, { 95, "Hút HP" }, { 96, "Hút KI" }, { 100, "Vàng" }, { 97, "PST" },
+                { 98, "SK2" }, { 99, "SK1" }, { 80, "Hồi HP" }, { 81, "Hồi KI" }
+            };
+            // 50: Sức đánh+#%, 77: HP+#%, 103: KI +#%, 101: +#% TN,SM, 94: Giáp #%, 108: #% Né đòn, 95: Biến #% tấn công thành HP,
+            // 96: Biến #% tấn công thành KI, 100: +#% vàng từ quái, 97: Phản #% sát thương, 98: Xuyên giáp #% chưởng,
+            // 99: Xuyên giáp #% cận chiến, 80: HP+#%/30s, 81: HP+#%/30s
+            if (Utilities.HasOptions(item, out List<int> listOpt, out List<int> listID, 50, 77, 103, 101, 94, 108, 95, 96, 100, 97, 98, 99, 80, 81))
+            {
+                string str = "";
+                for (int i = 0; i < listOpt.Count; i++)
+                {
+                    int id = listOpt[i];
+                    if (options.TryGetValue(id, out string value))
+                    {
+                        if (i == 0) str = $"{value} {item.itemOption[listID[0]].param}%";
+                        if (i == listOpt.Count - 1)
+                            text += $"{value} {item.itemOption[listID[i]].param}%";
+                        else
+                            text += $"{value} {item.itemOption[listID[i]].param}%, ";
+                    }
+                }
+                if(listOpt.Count == 1)
+                {
+                    mFont.tahoma_7_blue.drawString(g, text, x - mFont.tahoma_7_blue.getWidth(text), y + 10, mFont.LEFT);
+                }
+                else
+                {
+                    //mFont.tahoma_7_blue.drawString(g, str, x - mFont.tahoma_7_blue.getWidth(str), y + 10, mFont.LEFT);
+                    TextInfo.paint(g, text, x - mFont.tahoma_7_blue.getWidth(str), y + 10, mFont.tahoma_7_blue.getWidth(str), 15, mFont.tahoma_7_blue);
+                    g.setClip(panel.xScroll, panel.yScroll, panel.wScroll, panel.hScroll);
+                    g.translate(0, -panel.cmy);
                 }
             }
         }

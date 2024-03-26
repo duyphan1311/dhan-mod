@@ -59,6 +59,7 @@ namespace Mod.ModHelper
                 Utilities.host = (string)msg["host"];
                 Utilities.server = int.Parse((string)msg["serverIndex"]);
                 Utilities.port = int.Parse(msg["port"].ToString());
+                Utilities.key = (string)msg["key"];
                 Utilities.sizeData = msg["sizeData"];
                 Utilities.version = (string)msg["version"];
 
@@ -135,14 +136,16 @@ namespace Mod.ModHelper
                     string receive = Encoding.ASCII.GetString(bytes, 0, bytesRec);
                     msg = JsonMapper.ToObject(receive);
                 }
-                catch (SocketException)
+                catch (SocketException e)
                 {
                     GameCanvas.startOKDlg("Mất kết nối với QLTK");
+                    //writeLog(e.ToString());
                     return;
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException e)
                 {
                     GameCanvas.startOKDlg("Mất kết nối với QLTK");
+                    //writeLog(e.ToString());
                     return;
                 }
                 catch (Exception e)
