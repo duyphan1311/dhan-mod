@@ -1,4 +1,5 @@
 ﻿using Mod;
+using Mod.Auto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace Mod.PickMob
 
         public static void Update()
         {
-            if (IsWaiting())
+            if (IsWaiting() || AutoGoback.isGoingBack)
                 return;
 
             Char myChar = Char.myCharz();
@@ -133,25 +134,12 @@ namespace Mod.PickMob
                 }
                 ItemPicks.Clear();
                 IndexItemPick = 0;
-                if (modePickItem == PickItemMode.OnlyPickDiamond)
+                for (int i = 0; i < GameScr.vItemMap.size(); i++)
                 {
-                    IdItemPicks.Clear();
-                    TypeItemPicks.Clear();
-                    TypeItemBlocks.Clear();
-                    IdItemBlocks.Clear();
-                    IdItemBlocks.AddRange(IdItemBlockBase);
-                    IdItemPicks.Add(ID_ITEM_GEM);
-                    IdItemPicks.Add(ID_ITEM_GEM_LOCK);
-                }
-                else
-                {
-                    for (int i = 0; i < GameScr.vItemMap.size(); i++)
+                    ItemMap itemMap = (ItemMap)GameScr.vItemMap.elementAt(i);
+                    if (GetTpyePickItem(itemMap) != TypePickItem.CanNotPickItem)
                     {
-                        ItemMap itemMap = (ItemMap)GameScr.vItemMap.elementAt(i);
-                        if (GetTpyePickItem(itemMap) != TypePickItem.CanNotPickItem)
-                        {
-                            ItemPicks.Add(itemMap);
-                        }
+                        ItemPicks.Add(itemMap);
                     }
                 }
                 if (ItemPicks.Count > 0)
@@ -216,6 +204,7 @@ namespace Mod.PickMob
                                 if (Utilities.getDistance(Char.myCharz(), mobFocus) <= 50)
                                 {
                                     //Utilities.DoDoubleClickToObj(mobFocus);
+                                    myChar.focusManualTo(mobFocus);
                                     Service.gI().sendPlayerAttack(myVector, new MyVector(), -1);
                                 }
                             }

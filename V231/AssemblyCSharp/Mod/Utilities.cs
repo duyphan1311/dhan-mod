@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 using Vietpad.InputMethod;
+using static Mod.Auto.AutoBuy;
 
 namespace Mod
 {
@@ -34,7 +35,7 @@ namespace Mod
         public static readonly string PathHotkeyCommand = @"Data\hotkeyCommands.json";
 
 
-        public static readonly sbyte ID_SKILL_BUFF = 7;
+        public static readonly sbyte ID_SKILL_BUFF = Ability.Rescue;
         public static readonly short ID_ICON_ITEM_TDLT = 4387;
         public static readonly short ID_NPC_MOD_FACE = 7333;    // Doraemon
 
@@ -125,7 +126,7 @@ namespace Mod
         {
             return waypoint.maxX < 60 ? 15 :
                 waypoint.minX > TileMap.pxw - 60 ? TileMap.pxw - 15 :
-                waypoint.minX + 30;
+                waypoint.minX + ((waypoint.maxX - waypoint.minX) / 2);
         }
 
         public static int getYWayPoint(Waypoint waypoint)
@@ -200,7 +201,7 @@ namespace Mod
                 //if (distance > 60 && distance < 100)
                 //    Char.myCharz().currentMovePoint = new MovePoint(npc.cx, npc.cy);
                 //if (distance >= 100)
-                    Utilities.teleportMyChar(npc.cx, npc.cy);
+                Utilities.teleportMyChar(npc.cx, npc.cy);
             }
             Service.gI().openMenu(id);
         }
@@ -523,7 +524,7 @@ namespace Mod
         {
             try
             {
-                short[] arr = new short[]{ 531, 536, 530, 535, 529, 534 };
+                short[] arr = new short[] { 531, 536, 530, 535, 529, 534 };
                 for (sbyte i = 0; i < Char.myCharz().arrItemBody.Length; i++)
                 {
                     var item = Char.myCharz().arrItemBody[i];
@@ -766,7 +767,7 @@ namespace Mod
 
         private static void SaveRMS(string filename, string data)
         {
-            hasPathModRMS (filename, out string path);
+            hasPathModRMS(filename, out string path);
             List<AccountRMS> listAccountRMS = File.ReadAllText(path) == "" ? new List<AccountRMS>() : JsonMapper.ToObject<List<AccountRMS>>(File.ReadAllText(path));
 
             if (CheckAccExistOnFile(path, out int index, out _))
@@ -998,6 +999,40 @@ namespace Mod
             Service.gI().charMove();
         }
 
+        [ChatCommand("f")]
+        public static void OpenFlag(int x) => Service.gI().getFlag(1, (sbyte)x);
+
+        //[ChatCommand("buy")]
+        public static void AutoBuyItemPer100MS(int x, int y)
+        {
+            if (x < 0 || y < 0)
+            {
+                GameScr.info1.addInfo("Các giá trị phải là số tự nhiên lớn hơn 0", 0);
+                GameCanvas.panel.chatTField.isShow = false;
+                GameCanvas.panel.chatTField.ResetTF();
+                return;
+            }
+            ItemBuy item = new()
+            {
+                soLanMua = y - 1,
+                timeBuy = 100,
+                lastTimeMua = mSystem.currentTimeMillis(),
+                item = currentItem,
+                typeBuy = typeBuy
+            };
+            listItemBuy.Add(item);
+            isBuyItem = true;
+            GameScr.info1.addInfo($"Auto mua {item.item.template.name} {item.soLanMua + 1} lần", 0);
+            Service.gI().buyItem(typeBuy, item.item.template.id, 0);
+        }
+
+        //[ChatCommand("buy")]
+        public static void AutoBuyItem(int x, int y, int z)
+        {
+            Char.myCharz().cx += x;
+            Service.gI().charMove();
+        }
+
         [HotkeyCommand('m')]
         public static void OpenZone()
         {
@@ -1016,6 +1051,21 @@ namespace Mod
         public static void openTabFriend()
         {
             Service.gI().friend(0, -1);
+        }
+
+        [HotkeyCommand('p')]
+        public static void openTabPet()
+        {
+            GameCanvas.panel.setTypeMain();
+            GameCanvas.panel.show();
+            Service.gI().petInfo();
+            GameCanvas.panel2 = new Panel();
+            GameCanvas.panel2.tabName[7] = new string[1][] { new string[1] { string.Empty } };
+            GameCanvas.panel2.setTypeBodyOnly();
+            GameCanvas.panel2.show();
+
+            GameCanvas.panel.setTypePetMain();
+            GameCanvas.panel.show();
         }
 
         public static short getNRSDId()
@@ -1159,7 +1209,7 @@ namespace Mod
             bool result = false;
             if (item.itemOption == null)
                 return result;
-            if (item.template.type != 0 && item.template.type != 1 && item.template.type != 2 
+            if (item.template.type != 0 && item.template.type != 1 && item.template.type != 2
                 && item.template.type != 3 && item.template.type != 4 && item.template.type != 5
                 //&& item.template.type != 11 && item.template.type != 23 && item.template.type != 24 
                 && item.template.type != 32)
@@ -1417,5 +1467,23 @@ namespace Mod
             }
         }
         public static void setStateBackToOldZone(bool value) => isBackToOldZone = value;
+
+        public static bool isFrameMultipleOf(int multiple)
+        {
+            return GameCanvas.gameTick % (multiple * Time.timeScale) == 0;
+        }
+
+        public static bool isAutoBuffPean;
+        public static int pHPBuff = 5;
+        public static int pMPBuff = 5;
+
+        public static void AutoBuffPean()
+        {
+            if((Char.myCharz().cMP < Char.myCharz().cMPFull * pMPBuff / 100 || Char.myCharz().cHP < Char.myPetz().cHPFull * pHPBuff / 100)
+                && GameScr.hpPotion > 0 && !(Char.myCharz().cHP <= 0 || Char.myCharz().isDie))
+            {
+                GameScr.gI().doUseHP();
+            }
+        }
     }
 }

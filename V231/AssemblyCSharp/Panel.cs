@@ -151,6 +151,7 @@ public class Panel : IActionListener, IChatable
 	#region mod
 	public static string[] strTool = new string[]
 	{
+		"Hướng dẫn sử dụng",
 		"Menu Mod",
 		mResources.gameInfo,
 		mResources.change_flag,
@@ -7614,24 +7615,27 @@ public class Panel : IActionListener, IChatable
 		{
 			switch (selected)
 			{
-				case 0:
+                case 0:
+					GuidePanel.showTabGuidePanel();
+                    break;
+                case 1:
 					CustomPanelMenu.show(ModMenuMain.setTabModMenu, ModMenuMain.doFireModMenu, null, ModMenuMain.paintModMenu);
 					break;
-				case 1:
+				case 2:
 					doRada();
 					break;
-				case 2:
+				case 3:
 					hide();
 					Service.gI().openMenu(54);
 					break;
-				case 3:
+				case 4:
 					setTypeGameInfo();
 					break;
-				case 4:
+				case 5:
 					Service.gI().getFlag(0, -1);
 					InfoDlg.showWait();
 					break;
-				case 5:
+				case 6:
 					//if (Char.myCharz().statusMe == 14)
 					//	GameCanvas.startOKDlg(mResources.can_not_do_when_die);
 					//else
@@ -7640,7 +7644,7 @@ public class Panel : IActionListener, IChatable
 					setTypeZone();
 					show();
 					break;
-				case 6:
+				case 7:
 					GameCanvas.endDlg();
 					if (Char.myCharz().checkLuong() < 5)
 					{
@@ -7669,16 +7673,16 @@ public class Panel : IActionListener, IChatable
 						chatTField.tfChat.doChangeToTextBox();
 					}
 					break;
-				case 7:
+				case 8:
 					setTypeAccount();
 					break;
-				case 8:
+				case 9:
 					setTypeOption();
 					break;
-				case 9:
+				case 10:
 					GameCanvas.loginScr.backToRegister();
 					break;
-				case 10:
+				case 11:
 					if (GameCanvas.loginScr.isLogin2)
 						SoundMn.gI().backToRegister();
 					break;
@@ -7687,27 +7691,30 @@ public class Panel : IActionListener, IChatable
 		}
 		switch (selected)
 		{
-			case 0:
+            case 0:
+                GuidePanel.showTabGuidePanel();
+                break;
+            case 1:
 				CustomPanelMenu.show(ModMenuMain.setTabModMenu, ModMenuMain.doFireModMenu, null, ModMenuMain.paintModMenu);
 				break;
-			case 1:
+			case 2:
 				doRada();
 				break;
-			case 2:
+			case 3:
 				hide();
 				Service.gI().openMenu(54);
 				break;
-			case 3:
+			case 4:
 				setTypeGameInfo();
 				break;
-			case 4:
+			case 5:
 				doFirePet();
 				break;
-			case 5:
+			case 6:
 				Service.gI().getFlag(0, -1);
 				InfoDlg.showWait();
 				break;
-			case 6:
+			case 7:
 				//if (Char.myCharz().statusMe == 14)
 				//	GameCanvas.startOKDlg(mResources.can_not_do_when_die);
 				//else
@@ -7716,7 +7723,7 @@ public class Panel : IActionListener, IChatable
 				setTypeZone();
 				show();
 				break;
-			case 7:
+			case 8:
 				GameCanvas.endDlg();
 				if (Char.myCharz().checkLuong() < 5)
 				{
@@ -7745,16 +7752,16 @@ public class Panel : IActionListener, IChatable
 					chatTField.tfChat.doChangeToTextBox();
 				}
 				break;
-			case 8:
+			case 9:
 				setTypeAccount();
 				break;
-			case 9:
+			case 10:
 				setTypeOption();
 				break;
-			case 10:
+			case 11:
 				GameCanvas.loginScr.backToRegister();
 				break;
-			case 11:
+			case 12:
 				if (GameCanvas.loginScr.isLogin2)
 					SoundMn.gI().backToRegister();
 				break;
@@ -7808,7 +7815,7 @@ public class Panel : IActionListener, IChatable
 		setType(0);
 	}
 
-	private void doFirePet()
+	public void doFirePet()
 	{
 		InfoDlg.showWait();
 		Service.gI().petInfo();

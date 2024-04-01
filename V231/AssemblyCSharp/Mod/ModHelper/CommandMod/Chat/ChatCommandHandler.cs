@@ -148,8 +148,10 @@ namespace Mod.ModHelper.CommandMod.Chat
                 return false;
             }
 
-            text = text.Substring(1);
-            return execute(text);
+            return text
+                .Substring(1)
+                .Split(',')
+                .Aggregate(false, (acc, command) => execute(command.ToString()) || acc);
         }
     }
 }

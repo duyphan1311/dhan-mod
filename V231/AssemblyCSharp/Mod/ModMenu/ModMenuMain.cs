@@ -34,12 +34,12 @@ namespace Mod.ModMenu
             new ModMenuItemBoolean("Con trỏ tùy chỉnh", "Thay con trỏ chuột mặc định thành con trỏ chuột tùy chỉnh", CustomCursor.setState, false, "customcusor"),
             new ModMenuItemBoolean("Fake iPhone Client", "Thay đổi client thành client của iPhone", FakeIPhoneClient.setState, false, "fakeclient"),
 
-            new ModMenuItemBoolean("Tàn sát", "Bật/tắt tự động đánh quái", value => Pk9rPickMob.IsTanSat = value, false, "", false, "Bạn đang bật auto T77 hoặc auto up SS!"),
-            new ModMenuItemBoolean("Né siêu quái khi tàn sát", "Tự động né siêu quái khi tàn sát", value => Pk9rPickMob.IsNeSieuQuai = value, true, "isnesieuquaits"),
-            new ModMenuItemBoolean("Vượt địa hình khi tàn sát", "Bật/tắt tự động vượt địa hình khi đang tàn sát", value => Pk9rPickMob.IsVuotDiaHinh = value, true, "isvuotdiahinh"),
-            new ModMenuItemBoolean("Tự động nhặt vật phẩm", "Bật/tắt tự động nhặt vật phẩm", value => Pk9rPickMob.IsAutoPickItems = value, true, "isautopick", false, "Bạn đang bật auto T77 hoặc auto up SS!"),
-            new ModMenuItemBoolean("Không nhặt đồ của người khác", "Bật/tắt lọc không nhặt vật phẩm của người khác", value => Pk9rPickMob.IsItemMe = value, true, "ispickmyitemonly"),
-            new ModMenuItemBoolean("Giới hạn số lần nhặt", "Bật/tắt giới hạn số lần tự động nhặt một vật phẩm", value => Pk9rPickMob.IsLimitTimesPickItem = value, false,"islimitpicktimes"),
+            new ModMenuItemBoolean("Tàn sát", "Bật/tắt tự động đánh quái", Pk9rPickMob.SetSlaughter, false, "", false, "Bạn đang bật auto T77 hoặc auto up SS!"),
+            new ModMenuItemBoolean("Né siêu quái khi tàn sát", "Tự động né siêu quái khi tàn sát", Pk9rPickMob.SetAvoindSuperMonster, true, "isnesieuquaits"),
+            new ModMenuItemBoolean("Vượt địa hình khi tàn sát", "Bật/tắt tự động vượt địa hình khi đang tàn sát", Pk9rPickMob.SetCrossTerrain, true, "isvuotdiahinh"),
+            new ModMenuItemBoolean("Tự động nhặt vật phẩm", "Bật/tắt tự động nhặt vật phẩm", Pk9rPickMob.SetAutoPickItems, true, "isautopick", false, "Bạn đang bật auto T77 hoặc auto up SS!"),
+            new ModMenuItemBoolean("Không nhặt đồ của người khác", "Bật/tắt lọc không nhặt vật phẩm của người khác", Pk9rPickMob.SetAutoPickItemsFromOthers, true, "ispickmyitemonly"),
+            new ModMenuItemBoolean("Giới hạn số lần nhặt", "Bật/tắt giới hạn số lần tự động nhặt một vật phẩm", Pk9rPickMob.SetPickUpLimited, true,"islimitpicktimes"),
 
             new ModMenuItemBoolean("Hiện thông tin sư phụ", "Bật/tắt hiển thị thông tin sư phụ lên màn hình", CharInfo.setState, true, "infochar"),
             new ModMenuItemBoolean("Hiện thông tin đệ tử", "Bật/tắt hiển thị thông tin đệ tử lên màn hình", PetInfo.setState, true, "infopet"),
@@ -50,6 +50,10 @@ namespace Mod.ModMenu
             new ModMenuItemBoolean("Tự động đến map boss khi săn boss", "Bật/tắt Tự động đến map boss", AutoFindBoss.setState, false, "isGotoMapBoss"),
             new ModMenuItemBoolean("Check lag", "Bật/tắt Tự động đăng nhập lại khi lag", Utilities.setCheckLag, false),
             new ModMenuItemBoolean("Back to old zone", "Bật/tắt Tự động chuyển về khu vực cũ khi mất kết nối", Utilities.setStateBackToOldZone, false),
+
+            new ModMenuItemBoolean("Xin đậu", "Tự động xin cầu đậu", AutoPean.SetAutoRequestState, false),
+            new ModMenuItemBoolean("Cho đậu", "Tự động cho đậu", AutoPean.SetAutoDonateState, false),
+            new ModMenuItemBoolean("Thu đậu", "Tự động thu hoạch đậu khi ở nhà", AutoPean.SetAutoHarvestState, false),
         };
 
         /// <summary>
@@ -63,7 +67,7 @@ namespace Mod.ModMenu
                 else throw new ArgumentException();
             }, "targetfps", false, "Bạn chưa tắt Vsync!"),
             new ModMenuItemInt("Giảm đồ họa", new string[]{"Đang tắt", "Đang bật mức 1", "Đang bật mức 2", "Đang bật mức 3"}, "", 0, CustomBackground.StopAllBackgroundVideo, "levelreducegraphics"),
-            new ModMenuItemInt("Goback", new string[]{"Đang tắt", "Đang bật (goback tới chỗ cũ khi chết)", "Đang bật (goback tới map cố định)" }, "", 0, AutoGoback.setState),
+            new ModMenuItemInt("Goback", new string[]{"Đang tắt", "Đang bật (goback tới chỗ cũ khi chết)", "Đang bật (goback tới map cố định)", "Đang bật (trở về bản đồ cũ khi chết)" }, "", 0, AutoGoback.setState),
             new ModMenuItemInt("Gõ tiếng Việt", new string[]{"Đang tắt", "Đang bật kiểu gõ TELEX", "Đang bật kiểu gõ VIQR", "Đang bật kiểu gõ VNI"}, "", 1, delegate(int value)
             {
             if (value == 0) VietKeyHandler.VietModeEnabled = false;
@@ -75,11 +79,21 @@ namespace Mod.ModMenu
             }, "vietmode", false, "Bạn không biết gõ tiếng Việt!"),
             new ModMenuItemInt("Auto up đệ tử", new string[]{"Đang tắt", "Đang bật up đệ thường", "Đang bật up đệ né siêu quái", "Đang bật up đệ kaioken"}, "", 0, AutoPet.setState, "", false, "Bạn không có đệ tử!"),
             new ModMenuItemInt("Đánh khi đệ cần", new string[]{"Đánh quái gần nhất", "Đánh đệ (tự động bật cờ xám)", "Đánh bản thân (tự động bật cờ xám)"}, "", 0, AutoPet.setAttackState, "modeautopet", true, "Bạn chưa bật chức năng \"Auto up đệ tử\"!"),
+            new ModMenuItemInt(
+                 "Auto rescue",
+                 new string[]{ "Đang tắt", "Mọi người", "Chỉ thành viên trong bang hội", "Chỉ thú cưng", "Chỉ thú cưng của tôi" },
+                 "",
+                 0,
+                 AutoSkill.setReviveTargetMode,
+                 "",
+                 false
+            ),
+            new ModMenuItemInt("Mode tàn sát", new string[]{"Di chuyển đánh quái", "Tele đánh quái", "Tàn sát người chơi", "Auto đánh boss"}, "", 1, PickMobController.setState, "modetansat"),
+            //new ModMenuItemInt("Mode auto nhặt", new string[]{"Nhặt tất cả", "Chỉ nhặt ngọc"}, "", 0, PickMobController.setStatePickMode, "modeautonhat"),
+
             new ModMenuItemInt("Thời gian đổi nền", null, "Điều chỉnh thời gian thay đổi nền (giây)", 30, CustomBackground.setState, "backgroundinveral", false),
             new ModMenuItemInt("Thời gian đổi logo", null, "Điều chỉnh thời gian thay đổi logo (giây)", 30, CustomLogo.setState, "logoinveral", false),
             new ModMenuItemInt("Chiều cao của logo", null, "Điều chỉnh chiều cao của logo", 80, CustomLogo.setLogoHeight, "logoheight"),
-            new ModMenuItemInt("Mode tàn sát", new string[]{"Di chuyển đánh quái", "Tele đánh quái", "Tàn sát người chơi", "Auto đánh boss"}, "", 1, PickMobController.setState, "modetansat"),
-            new ModMenuItemInt("Mode auto nhặt", new string[]{"Nhặt tất cả", "Chỉ nhặt ngọc"}, "", 0, PickMobController.setStatePickMode, "modeautonhat"),
         };
 
         /// <summary>
@@ -111,11 +125,11 @@ namespace Mod.ModMenu
             { "levelreducegraphics", 0 },
             { "vietmode", 1 },
             { "modeautopet", 0 },
+            { "modetansat", 1 },
+            { "modeautonhat", 0 },
             { "backgroundinveral", 30 },
             { "logoinveral", 30 },
             { "logoheight", 80 },
-            { "modetansat", 1 },
-            { "modeautonhat", 0 }
         };
 
         public static Dictionary<string, bool> defaultValueModMenuItemBools = new Dictionary<string, bool>()

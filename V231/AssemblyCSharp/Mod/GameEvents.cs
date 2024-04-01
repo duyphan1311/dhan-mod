@@ -310,6 +310,7 @@ namespace Mod
             if (GameCanvas.gameTick % (int)(10 * Time.timeScale) == 0 && TileMap.mapID != 21 && TileMap.mapID != 22 && TileMap.mapID != 23)
                 Service.gI().openUIZone();
             if (GameCanvas.gameTick % (int)(10 * Time.timeScale) == 0 && ShareInfo.isShareInfo) ShareInfo.sendInfo();
+            if (GameCanvas.gameTick % (int)(10 * Time.timeScale) == 0 && Utilities.isAutoBuffPean) Utilities.AutoBuffPean();
             if (GameCanvas.gameTick % (int)(10 * Time.timeScale) == 0 && xskill) loadSkill();
             if (GameCanvas.gameTick % (int)(10 * Time.timeScale) == 0 && Utilities.IsRevive) Utilities.AutoRevive();
             if (GameCanvas.gameTick % (int)(10 * Time.timeScale) == 0 && AutoUpgrade.isShowListUpgrade) AutoUpgrade.UpdateListUpgrade();
@@ -354,6 +355,8 @@ namespace Mod
             CharInfo.update();
             PetInfo.update();
             SetDo.Update();
+            AutoPean.Update();
+            AutoSkill.Update();
             if (!isALogin) isALogin = true;
             if (!Utilities.isLogin) Utilities.isLogin = false;
             //NOTE onUpdateChatTextField không thể bấm tab.

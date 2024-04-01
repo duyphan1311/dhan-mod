@@ -23,10 +23,6 @@ public class Session_ME : ISession
 			sendingMessage.Add(message);
 		}
 
-		#region mod
-		private long lastTimeCheck = 0;
-        #endregion
-
         public void run()
 		{
 			while (connected)
@@ -50,19 +46,10 @@ public class Session_ME : ISession
 					{
 						Cout.LogError(ex.ToString());
 					}
-					#region mod
-					if (Utilities.isCheckLag && mSystem.currentTimeMillis() - lastTimeCheck < 100L)
-                        Utilities.requests = 30;
-                    lastTimeCheck = mSystem.currentTimeMillis();
-                    #endregion
                 }
                 catch (Exception)
 				{
 					Res.outz("error send message! ");
-                    #region mod
-					if(Utilities.isCheckLag)
-						Utilities.checkLag();
-                    #endregion
                 }
             }
 		}

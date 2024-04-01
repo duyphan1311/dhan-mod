@@ -1906,25 +1906,35 @@ public class Service
 		}
 	}
 
-	public void clientOk()
+
+    #region mod
+    private long lastTimeCheck = 0;
+
+    public void clientOk()
 	{
 		Message message = null;
 		try
 		{
 			message = messageNotMap(13);
 			session.sendMessage(message);
-		}
-		catch (Exception ex)
+            if (Utilities.isCheckLag && mSystem.currentTimeMillis() - lastTimeCheck < 100L)
+                Utilities.requests = 30;
+            lastTimeCheck = mSystem.currentTimeMillis();
+        }
+        catch (Exception ex)
 		{
 			Cout.println(ex.Message + ex.StackTrace);
-		}
-		finally
+            if (Utilities.isCheckLag)
+                Utilities.checkLag();
+        }
+        finally
 		{
 			message.cleanup();
 		}
-	}
+    }
+    #endregion
 
-	public void tradeInvite(int charId)
+    public void tradeInvite(int charId)
 	{
 		Message message = null;
 		try

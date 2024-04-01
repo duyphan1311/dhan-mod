@@ -27,17 +27,81 @@ namespace Mod.MenuOnscreen
                         GameScr.info1.addInfo("Đã tắt tàn sát!", 0);
                     }))
                 .addItem("Tàn sát", new(showMenuTanSat))
-                .addItem("Nâng cấp\ntrang bị", new(AutoUpgrade.showMenu))
-                //.addItem("XMap", new(Pk9rXmap.showXmapMenu))
-                //.addItem("Teleport", new(TeleportMenu.TeleportMenu.ShowMenu))
-                //.addItem("Set đồ", new(SetDo.ShowMenu))
-                .addItem("Auto chat", new(AutoChat.showMenu))
-                .addItem("Auto vứt\nvật phẩm", new(AutoGetItemOut.ShowMenu))
+                .addItem("Nâng cấp", new(AutoUpgrade.showMenu))
+                .addItem("Chat", new(AutoChat.showMenu))
+                .addItem("Vứt vật phẩm", new(AutoGetItemOut.ShowMenu))
+                .addItem("Đậu", new(showMenuPean))
+                .addItem("Đệ tử", new(showMenuPet))
                 .addItem("Vòng quay", new(AutoCrackBall.ShowMenu))
-                //.addItem("NPC", new(Utilities.showMenuTeleNpc))
-                .addItem("Rương đồ", new(() => Service.gI().openMenu(3)))
+                .addItem("Rương đồ", new(() =>
+                {
+                    GameCanvas.panel.setTypeBox();
+                    GameCanvas.panel.show();
+                }))
                 .start();
 
+        }
+
+        public static void showMenuPet()
+        {
+            new MenuBuilder()
+                .addItem("Auto up đệ:\n[" + (AutoPet.mode == AutoPet.AutoPetMode.Disabled ? "Off]" : "On]"), new(() =>
+                {
+                    if (AutoPet.mode == AutoPet.AutoPetMode.Disabled) AutoPet.setState(1);
+                    else AutoPet.setState(0);
+                    GameScr.info1.addInfo("Tự động up đệ: " + (AutoPet.mode == AutoPet.AutoPetMode.Disabled ? "Off" : "On"), 0);
+                }))
+                .addItem("Bật cờ\nchống PK:\n[" + (Utilities.IsAutoFlag ? "On]" : "Off]"), new(() =>
+                {
+                    Utilities.toggleAutoFlag();
+                    GameScr.info1.addInfo("Bật cờ chống PK: " + (Utilities.IsAutoFlag ? "On" : "Off"), 0);
+                }))
+                .addItem($"HP Buff: {Utilities.pHPBuff}%", new(() =>
+                {
+                    ChatTextField.gI().strChat = string.Empty;
+                    ChatTextField.gI().tfChat.name = "%HP";
+                    ChatTextField.gI().startChat2(new MenuMain(), "Nhập giá trị %HP của đệ tử");
+                }))
+                .addItem($"MP Buff: {Utilities.pMPBuff}%", new(() =>
+                {
+                    ChatTextField.gI().strChat = string.Empty;
+                    ChatTextField.gI().tfChat.name = "%MP";
+                    ChatTextField.gI().startChat2(new MenuMain(), "Nhập giá trị %MP của đệ tử");
+                }))
+                .start();
+        }
+
+        public static void showMenuPean()
+        {
+            new MenuBuilder()
+                .addItem("Auto buff đậu", new(showMenuBuffPean))
+                .addItem("Cho đậu:\n[" + (AutoPean.isAutoDonateEnabled ? "On]" : "Off]"), new(() => AutoPean.SetAutoDonateState(true)))
+                .addItem("Xin đậu:\n[" + (AutoPean.isAutoRequestEnabled ? "On]" : "Off]"), new(() => AutoPean.SetAutoRequestState(true)))
+                .addItem("Thu đậu:\n[" + (AutoPean.isAutoHarvestEnabled ? "On]" : "Off]"), new(() => AutoPean.SetAutoHarvestState(true)))
+                .start();
+        }
+
+        public static void showMenuBuffPean()
+        {
+            new MenuBuilder()
+                .addItem(Utilities.isAutoBuffPean ? "Kết thúc" : "Bắt đầu", new(() =>
+                {
+                    Utilities.isAutoBuffPean = !Utilities.isAutoBuffPean;
+                    GameScr.info1.addInfo("Tự động buff đậu: " + (Utilities.isAutoBuffPean ? "On" : "Off"), 0);
+                }))
+                .addItem($"HP Buff: {Utilities.pHPBuff}%", new(() =>
+                {
+                    ChatTextField.gI().strChat = string.Empty;
+                    ChatTextField.gI().tfChat.name = "%HP";
+                    ChatTextField.gI().startChat2(new MenuMain(), "Nhập giá trị %HP");
+                }))
+                .addItem($"MP Buff: {Utilities.pMPBuff}%", new(() =>
+                {
+                    ChatTextField.gI().strChat = string.Empty;
+                    ChatTextField.gI().tfChat.name = "%MP";
+                    ChatTextField.gI().startChat2(new MenuMain(), "Nhập giá trị %MP");
+                }))
+                .start();
         }
 
         public static void showMenuTanSat()
@@ -85,18 +149,75 @@ namespace Mod.MenuOnscreen
 
         public void onChatFromMe(string text, string to)
         {
-            if (!string.IsNullOrEmpty(text))
-            {
+            if (string.IsNullOrEmpty(ChatTextField.gI().tfChat.getText()) && string.IsNullOrEmpty(text))
+                return;
 
+            if (to == "Nhập giá trị %HP")
+            {
+                try
+                {
+                    if (!int.TryParse(text, out int value)) throw new Exception("Giá trị nhập vào phải là số tự nhiên!");
+                    if (value < 0 || value > 100) throw new Exception("Giá trị phải lớn hơn 0 và nhỏ hơn 100!");
+                    Utilities.pHPBuff = value;
+                    showMenuBuffPean();
+                }
+                catch (Exception e)
+                {
+                    GameCanvas.startOKDlg(e.Message);
+                }
+            }
+            else if (to == "Nhập giá trị %MP")
+            {
+                try
+                {
+                    if (!int.TryParse(text, out int value)) throw new Exception("Giá trị nhập vào phải là số tự nhiên!");
+                    if (value < 0 || value > 100) throw new Exception("Giá trị phải lớn hơn 0 và nhỏ hơn 100!");
+                    Utilities.pMPBuff = value;
+                    showMenuBuffPean();
+                }
+                catch (Exception e)
+                {
+                    GameCanvas.startOKDlg(e.Message);
+                }
+            }
+            else if (to == "Nhập giá trị %HP của đệ tử")
+            {
+                try
+                {
+                    if (!int.TryParse(text, out int value)) throw new Exception("Giá trị nhập vào phải là số tự nhiên!");
+                    if (value < 0 || value > 100) throw new Exception("Giá trị phải lớn hơn 0 và nhỏ hơn 100!");
+                    AutoPet.hpBuff = value;
+                    showMenuPet();
+                }
+                catch (Exception e)
+                {
+                    GameCanvas.startOKDlg(e.Message);
+                }
+            }
+            else if (to == "Nhập giá trị %MP của đệ tử")
+            {
+                try
+                {
+                    if (!int.TryParse(text, out int value)) throw new Exception("Giá trị nhập vào phải là số tự nhiên!");
+                    if (value < 0 || value > 100) throw new Exception("Giá trị phải lớn hơn 0 và nhỏ hơn 100!");
+                    AutoPet.mpBuff = value;
+                    showMenuPet();
+                }
+                catch (Exception e)
+                {
+                    GameCanvas.startOKDlg(e.Message);
+                }
             }
             else
-                GameCanvas.panel.chatTField.isShow = false;
-            GameCanvas.panel.chatTField.ResetTF();
+                ChatTextField.gI().isShow = false;
+
+            ChatTextField.gI().ResetTF();
         }
 
         public void onCancelChat()
         {
-            GameCanvas.panel.chatTField.ResetTF();
+            ChatTextField.gI().isShow = false;
+            ChatTextField.gI().ResetTF();
         }
 
         public void perform(int idAction, object p)

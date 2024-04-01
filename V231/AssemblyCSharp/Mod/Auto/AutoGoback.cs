@@ -1,79 +1,113 @@
 ﻿using Mod.Xmap;
-using UnityEngine;
+using System;
 
 namespace Mod.Auto
 {
     public class AutoGoback
     {
-        public static InfoGoback infoGoback = new InfoGoback();
-        private static bool isGobacking = false;
-        private static GobackMode gobackMode;
-        private static long lastTimeGoback;
+        public static InfoGoBack goingBackTo = new InfoGoBack();
+        public static bool isGoingBack = false;
+        public static GoBackMode mode { get; private set; }
+        private static long lastTimeGoBack;
 
-        public static void update()
-        {
-            if (gobackMode == GobackMode.Disabled) return;
-            if (GameCanvas.gameTick % (30 * Time.timeScale) == 0)
-            {
-                if (!isGobacking)
-                {
-                    if (Char.myCharz().cHP <= 0 || Char.myCharz().isDie)
-                    {
-                        if (mSystem.currentTimeMillis() - lastTimeGoback > 4000) lastTimeGoback = mSystem.currentTimeMillis();
-                        if (mSystem.currentTimeMillis() - lastTimeGoback > 3000)
-                        {
-                            if (gobackMode == GobackMode.GoBackToFixedLocation) infoGoback = new InfoGoback(TileMap.mapID, TileMap.zoneID, Char.myCharz());
-                            Service.gI().returnTownFromDead();
-                            isGobacking = true;
-                        }
-                    }
-                }
-                else
-                {
-                    if (TileMap.mapID == Char.myCharz().cgender + 21)
-                    {
-                        if (GameScr.vItemMap.size() > 0) Service.gI().pickItem(-1);
-                        else if (Char.myCharz().cHP <= 1) GameScr.gI().doUseHP();
-                        else if (!XmapController.gI.IsActing) XmapController.start(infoGoback.mapID);
-                    }
-                    else if (TileMap.mapID == infoGoback.mapID)
-                    {
-                        if (TileMap.zoneID != infoGoback.zoneID && GameCanvas.gameTick % (60 * Time.timeScale) == 0) Service.gI().requestChangeZone(infoGoback.zoneID, 0);
-                        if (TileMap.zoneID == infoGoback.zoneID)
-                        {
-                            if (Char.myCharz().cx != infoGoback.x || Char.myCharz().cy != infoGoback.y) Utilities.teleportMyChar(infoGoback.x, infoGoback.y);
-                            else isGobacking = false;
-                        }
-                    }
-                }
-            }
-        }
+        public static bool isEnabled => mode != GoBackMode.Disabled;
 
         public static void setState(int value)
         {
-            gobackMode = (GobackMode)value;
-            if (gobackMode == GobackMode.GoBackToFixedLocation)
+            mode = (GoBackMode)value;
+
+            if (isEnabled) enable();
+            else disable();
+        }
+
+        public static void enable()
+        {
+            if (mode != GoBackMode.GoBackToFixedLocation) return;
+
+            goingBackTo = new InfoGoBack(TileMap.mapID, TileMap.zoneID, Char.myCharz().cx, Char.myCharz().cy);
+            GameScr.info1.addInfo($"Goback đến map: {TileMap.mapName}, khu: {TileMap.zoneID}, tọa độ: ({goingBackTo.x}, {goingBackTo.y})!", 0);
+        }
+
+        public static void disable()
+        {
+            isGoingBack = false;
+            XmapController.finishXmap();
+        }
+
+        public static void update()
+        {
+            if (!isEnabled || !Utilities.isFrameMultipleOf(60) || XmapController.gI.IsActing)
+                return;
+
+            if (isGoingBack)
+                handleGoingBack();
+            else if (MyChar.isDead())
+                handleDeath();
+        }
+
+        private static void handleGoingBack()
+        {
+            if (MyChar.isHome())
             {
-                infoGoback = new InfoGoback(TileMap.mapID, TileMap.zoneID, Char.myCharz().cx, Char.myCharz().cy);
-                GameScr.info1.addInfo($"Goback đến map: {TileMap.mapName}, khu: {TileMap.zoneID}, tọa độ: ({infoGoback.x}, {infoGoback.y})!", 0);
+                if (hasChicken()) Service.gI().pickItem(-1);
+                else if (Char.myCharz().cHP <= 1) GameScr.gI().doUseHP();
+                else XmapController.start(goingBackTo.mapID);
+            }
+            else if (TileMap.mapID == goingBackTo.mapID)
+            {
+                if (TileMap.zoneID != goingBackTo.zoneID)
+                    Service.gI().requestChangeZone(goingBackTo.zoneID, 0);
+                else
+                {
+                    if (mode != GoBackMode.GoBackToMap && Char.myCharz().cx != goingBackTo.x || Char.myCharz().cy != goingBackTo.y)
+                        Utilities.teleportMyChar(goingBackTo.x, goingBackTo.y);
+                    else
+                        isGoingBack = false;
+                }
             }
         }
 
-        public struct InfoGoback
+        private static void handleDeath()
+        {
+            long now = mSystem.currentTimeMillis();
+            long timeSinceDeath = now - lastTimeGoBack;
+
+            if (timeSinceDeath > 4000)
+            {
+                lastTimeGoBack = now;
+                return;
+            }
+
+            if (timeSinceDeath > 3000)
+            {
+                if (mode != GoBackMode.GoBackToFixedLocation)
+                    goingBackTo = new InfoGoBack(TileMap.mapID, TileMap.zoneID, Char.myCharz());
+
+                Service.gI().returnTownFromDead();
+                isGoingBack = true;
+            }
+        }
+
+        private static bool hasChicken()
+        {
+            return GameScr.vItemMap.size() > 0;
+        }
+
+        public struct InfoGoBack
         {
             public int mapID;
             public int zoneID;
             public int x;
             public int y;
 
-            public InfoGoback(int mapId, int zoneId, int x, int y)
+            public InfoGoBack(int mapId, int zoneId, int x, int y)
             {
                 mapID = mapId;
                 zoneID = zoneId;
                 this.x = x;
                 this.y = TileMap.tileTypeAt(x, y, 2) ? y : Utilities.getYGround(x);
             }
-            public InfoGoback(int mapId, int zoneId, IMapObject mapObject)
+            public InfoGoBack(int mapId, int zoneId, IMapObject mapObject)
             {
                 mapID = mapId;
                 zoneID = zoneId;
@@ -82,12 +116,12 @@ namespace Mod.Auto
             }
         }
 
-        public enum GobackMode
+        public enum GoBackMode
         {
             Disabled,
-            GoBackToWhereMeDied,
-            GoBackToFixedLocation
+            GoBackToWhereIDied,
+            GoBackToFixedLocation,
+            GoBackToMap,
         }
-
     }
 }
