@@ -1186,7 +1186,7 @@ namespace Mod
             {
                 mapName = mapName.Replace("Về chỗ cũ: ", "");
                 if (TileMap.mapNames[mapCapsuleReturn].Equals(mapName)) return mapCapsuleReturn;
-                if (mapName.Equals("Rừng đá")) return -1;
+                //if (mapName.Equals("Rừng đá")) return -1;
             }
             for (int i = 0; i < TileMap.mapNames.Length; i++) if (mapName.Equals(TileMap.mapNames[i])) return i;
             return -1;

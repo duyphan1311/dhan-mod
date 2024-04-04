@@ -259,6 +259,22 @@ namespace Mod.PickMob
             }
         }
 
+        [ChatCommand("ask")]
+        public static void setSkill(int index)
+        {
+            SkillTemplate template = Char.myCharz().nClass.skillTemplates[index - 1];
+            if (IdSkillsTanSat.Contains(template.id))
+            {
+                IdSkillsTanSat.Remove(template.id);
+                GameScr.info1.addInfo($"Đã xoá khỏi danh sách skill sử dụng tự động đánh quái skill: {template.name}[{template.id}]", 0);
+            }
+            else
+            {
+                IdSkillsTanSat.Add(template.id);
+                GameScr.info1.addInfo($"Đã thêm vào danh sách skill sử dụng tự động đánh quái skill: {template.name}[{template.id}]", 0);
+            }
+        }
+
         public static bool Chat(string text)
         {
             if (IsGetInfoChat<int>(text, "sln"))

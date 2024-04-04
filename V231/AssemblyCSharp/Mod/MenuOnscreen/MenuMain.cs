@@ -38,8 +38,27 @@ namespace Mod.MenuOnscreen
                     GameCanvas.panel.setTypeBox();
                     GameCanvas.panel.show();
                 }))
+                .addItem("Tuỳ chỉnh", new(showMenuTool))
                 .start();
 
+        }
+
+        public static void showMenuTool()
+        {
+            new MenuBuilder()
+                .addItem($"Tốc độ game:\n{Utilities.speedGame}", new(() =>
+                {
+                    ChatTextField.gI().strChat = string.Empty;
+                    ChatTextField.gI().tfChat.name = "Speed";
+                    ChatTextField.gI().startChat2(new MenuMain(), "Nhập tốc độ game");
+                }))
+                .addItem($"Tốc độ chạy:\n{Utilities.speedRun}", new(() =>
+                {
+                    ChatTextField.gI().strChat = string.Empty;
+                    ChatTextField.gI().tfChat.name = "Speed";
+                    ChatTextField.gI().startChat2(new MenuMain(), "Nhập tốc độ chạy");
+                }))
+                .start();
         }
 
         public static void showMenuPet()
@@ -104,6 +123,7 @@ namespace Mod.MenuOnscreen
                 .start();
         }
 
+        [HotkeyCommand('t')]
         public static void showMenuTanSat()
         {
             var menuBuilder = new MenuBuilder();
@@ -202,6 +222,34 @@ namespace Mod.MenuOnscreen
                     if (value < 0 || value > 100) throw new Exception("Giá trị phải lớn hơn 0 và nhỏ hơn 100!");
                     AutoPet.mpBuff = value;
                     showMenuPet();
+                }
+                catch (Exception e)
+                {
+                    GameCanvas.startOKDlg(e.Message);
+                }
+            }
+            else if (to == "Nhập tốc độ game")
+            {
+                try
+                {
+                    if (!float.TryParse(text, out float value)) throw new Exception("Giá trị nhập vào phải là số!");
+                    if (value < 0 || value > 100) throw new Exception("Giá trị phải lớn hơn 0 và nhỏ hơn 100!");
+                    Utilities.setSpeedGame(value);
+                    showMenuTool();
+                }
+                catch (Exception e)
+                {
+                    GameCanvas.startOKDlg(e.Message);
+                }
+            }
+            else if (to == "Nhập tốc độ chạy")
+            {
+                try
+                {
+                    if (!int.TryParse(text, out int value)) throw new Exception("Giá trị nhập vào phải là số tự nhiên!");
+                    if (value < 0 || value > 100) throw new Exception("Giá trị phải lớn hơn 0 và nhỏ hơn 100!");
+                    Utilities.setSpeedRun(value);
+                    showMenuTool();
                 }
                 catch (Exception e)
                 {

@@ -233,8 +233,8 @@ namespace Mod.Xmap
 
         private void loadLinkToCold()
         {
-            if (Char.myCharz().taskMaint.taskId <= 30)
-                return;
+            //if (Char.myCharz().taskMaint.taskId <= 30)
+            //    return;
 
             const int npcId = 12;
             const int select = 0;
