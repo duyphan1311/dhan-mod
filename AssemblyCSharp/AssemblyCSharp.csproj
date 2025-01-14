@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>net35</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>Preview</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>True</Optimize>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="LitJSON">
+      <HintPath>..\..\..\Libraries\LitJson.dll</HintPath>
+    </Reference>
+    <Reference Include="StarkSoftProxy">
+      <HintPath>..\..\..\Libraries\StarkSoftProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\Libraries\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="VietKey.NET">
+      <HintPath>..\..\..\Libraries\VietKey.NET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(TargetDir)Assembly-CSharp.dll&quot; &quot;D:\Mod_NRO\Main\Game\243\Game_Data\Managed\&quot;" />
+  </Target>
+</Project>
